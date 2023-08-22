@@ -1,0 +1,38 @@
+html {
+    background-color: #16161d;
+}
+
+.gradient-background {
+    background: -webkit-linear-gradient(145deg, #ff4242, #d400f0);
+    background: -moz-linear-gradient(145deg, #ff4242, #d400f0);
+    background: -ms-linear-gradient(145deg, #ff4242, #d400f0);
+    background: -o-linear-gradient(145deg, #ff4242, #d400f0);
+    background: linear-gradient(145deg, #ff4242, #d400f0);
+}
+
+.page-title {
+    color:white;
+    
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1.125;
+}
+
+.form-label {
+    color: white;
+}
+
+.text-input {
+    background-color: #010409;
+    border: 0;
+    color: white;
+}
+
+.text-input::placeholder {
+    color: gray;
+}
+
+.post-button {
+    color: white;
+    border: 0;
+}

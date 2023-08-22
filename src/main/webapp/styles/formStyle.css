@@ -1,0 +1,54 @@
+.gradient-background {
+	background: -webkit-linear-gradient(145deg, #ff4242, #d400f0);
+	background: -moz-linear-gradient(145deg, #ff4242, #d400f0);
+	background: -ms-linear-gradient(145deg, #ff4242, #d400f0);
+	background: -o-linear-gradient(145deg, #ff4242, #d400f0);
+	background: linear-gradient(145deg, #ff4242, #d400f0);
+}
+
+html, body {
+	margin: 0;
+	height: 100%;
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+
+body {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.form-container {
+	width: 23rem;  
+	background-color: #EEEEEE9A;
+	border-radius: 1rem;
+	box-shadow: 0.8rem 0.8rem 1.5rem #16161d;
+	animation: opacityPositionChange 0.4s;
+}
+
+@keyframes opacityPositionChange {
+  0% {
+    transform: translateY(1000px);
+	opacity: 0%;
+  }
+  100% {
+    transform: translateY(0px);
+	opacity: 100%;
+  }
+}
+
+.link-button {
+	background-color: transparent;
+	background-repeat: no-repeat;
+	border: none;
+	cursor: pointer;
+	overflow: hidden;
+	outline: none;
+	color: #d400f0;
+	margin-top: 1rem;
+}
+
+.link-button-container {
+	margin-top: 0.8rem;
+}

@@ -1,0 +1,75 @@
+html {
+	background-color: #16161d;
+}
+
+.detail-label {
+	font-size: small;
+	color: gray;
+}
+
+.label-link:hover {
+	cursor: pointer;
+	animation: labelColorChange 0.7s infinite;
+
+}
+
+@keyframes labelColorChange {
+  0% {
+	color: #ff4242;
+  }
+  50%{
+  	color: #d400f0;
+  }
+  100% {
+	color: #ff4242;
+  }
+}
+
+.post-title {
+	color: white;
+	font-size: 2rem;
+	font-weight: 600;
+	line-height: 1.125;
+}
+
+.tag-label {
+	color: gray;
+	font-size: medium;
+	cursor: pointer;
+}
+
+.link-button {
+	background-color: transparent;
+	background-repeat: no-repeat;
+	border: none;
+	cursor: pointer;
+	overflow: hidden;
+	outline: none;
+	color: gray;
+	margin-top: 1rem;
+}
+
+.link-button-container {
+	margin-bottom: 0.5rem;
+}
+
+.divisor{
+border-top: 1px solid #ff4242;
+background: #ff4242; 
+animation: divisorColorChange 1s infinite;
+}
+
+@keyframes divisorColorChange {
+  0% {
+	border-top: 1px solid #ff4242;
+	color: #ff4242;
+  }
+  50%{
+  	border-top: 1px solid #d400f0;
+  	color: #d400f0;
+  }
+  100% {
+	border-top: 1px solid #ff4242;
+	color: #d400f0;
+  }
+}
