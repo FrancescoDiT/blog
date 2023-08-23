@@ -11,13 +11,12 @@
   </welcome-file-list>
   
 	<session-config>
-		<session-timeout>3600</session-timeout>
+		<session-timeout>36000000</session-timeout>
 			<cookie-config>
 				<name>BlogSession</name>
 				<http-only>true</http-only>
 				<secure>false</secure>
 			</cookie-config>
 		</session-config>
-		
 
 </web-app>

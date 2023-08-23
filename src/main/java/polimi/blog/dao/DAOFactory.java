@@ -4,6 +4,7 @@ import polimi.blog.dao.model.UserDAO;
 import polimi.blog.dao.model.PostDAO;
 import polimi.blog.dao.model.TagDAO;
 import polimi.blog.dao.model.CommentDAO;
+
 import polimi.blog.dao.jpa.*;
 public abstract class DAOFactory {
 
@@ -15,6 +16,5 @@ public abstract class DAOFactory {
 	public static DAOFactory getDAOFactory() {
 		return new DAOFactoryJpa();
 	}
-	
 }
  

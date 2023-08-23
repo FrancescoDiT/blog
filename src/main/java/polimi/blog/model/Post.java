@@ -55,18 +55,18 @@ public class Post {
 	@Column(nullable = false)
 	private LocalDateTime postDate;
 	
-	@ManyToOne(fetch=FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 	
-    @ManyToMany(mappedBy = "savedPosts")
+    @ManyToMany(mappedBy = "savedPosts", fetch = FetchType.LAZY)
     private List<User> userSaved = new ArrayList<>();
     
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinTable(name = "Tags_Links", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name =  "tag_id"))
 	private List<Tag> tags = new ArrayList<>();
 	
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
 
 	public int getId() {

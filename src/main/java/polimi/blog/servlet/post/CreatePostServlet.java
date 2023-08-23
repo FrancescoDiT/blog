@@ -75,13 +75,33 @@ public class CreatePostServlet extends HttpServlet {
 			
 				User u = (User) request.getSession().getAttribute("user");
 				Post p = new Post(title, content, date, u);
-				DAOFactory.getDAOFactory().getPostDAO().addPost(u, p);
 				
-				tagList.forEach(t -> {DAOFactory.getDAOFactory().getTagDAO().addTagToPost(p, t);});
-				
-				request.getSession().setAttribute("post", p);
-				request.getRequestDispatcher("/WEB-INF/PostPages/PostPage.jsp").forward(request, response);
-				return;
+				if(!DAOFactory.getDAOFactory().getPostDAO().addPost(u, p)) {
+					request.getSession().setAttribute("post-error", "error: could not load the post.");
+					request.getRequestDispatcher("/WEB-INF/PostPages/CreatePostPage.jsp").forward(request, response);
+					
+				} else {
+				tagList.forEach(t -> {
+					
+					if(!DAOFactory.getDAOFactory().getTagDAO().addTagToPost(p, t)) {
+						
+							request.getSession().setAttribute("post-error", "error: could not load the post.");
+							try {
+								request.getRequestDispatcher("/WEB-INF/PostPages/CreatePostPage.jsp").forward(request, response);
+								return;
+							} catch (ServletException e) {
+								// TODO Auto-generated catch block
+								System.err.println("SERVLET EXCEPTION");
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								System.err.println("IOEXCEPTION");
+							}
+						}
+					});	
+						request.getSession().setAttribute("post", p);
+						request.getRequestDispatcher("/WEB-INF/PostPages/PostPage.jsp").forward(request, response);
+						return;
+				}		
 			 }
 		request.getRequestDispatcher("/WEB-INF/PostPages/CreatePostPage.jsp").forward(request, response);
 		}

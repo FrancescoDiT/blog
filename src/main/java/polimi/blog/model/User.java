@@ -76,21 +76,21 @@ public class User {
 	@Column(nullable = false)
 	private LocalDateTime creationDate;
 	
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.ALL,  fetch = FetchType.LAZY)
 	@JoinTable(name = "posts_saved", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name =  "post_id"))
 	private List<Post> savedPosts = new ArrayList<>();
 	
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinTable(name = "users_follows", joinColumns = @JoinColumn(name = "follower_id"), inverseJoinColumns = @JoinColumn(name =  "following_id"))
 	private List<User> followedUsers = new ArrayList<>();  //quelli che tu segui
 	
-    @ManyToMany(mappedBy = "followedUsers")
+    @ManyToMany(mappedBy = "followedUsers", fetch = FetchType.LAZY)
     private List<User> followingUsers = new ArrayList<>(); //quelli che ti seguono
 	
 	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Post> posts = new ArrayList<>();
 	
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	private List<Comment> comments = new ArrayList<>();
 
 	public int getId() {

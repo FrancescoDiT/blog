@@ -4,14 +4,15 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.Query;
-import javax.persistence.RollbackException;
 import javax.persistence.TypedQuery;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 import polimi.blog.dao.jpa.CommentDAOJpa;
 import polimi.blog.dao.model.CommentDAO;
 import polimi.blog.model.Post;
-import polimi.blog.model.Tag;
 import polimi.blog.model.User;
 import polimi.blog.model.Comment;
 
@@ -81,6 +82,7 @@ public class CommentDAOJpa implements CommentDAO{
 	@Override
 	public boolean addCommentToPost(Post p, Comment c) {
 	    EntityManager em = DAOFactoryJpa.getManager();
+
 	    try {
 	        em.getTransaction().begin();
 	        
@@ -89,6 +91,8 @@ public class CommentDAOJpa implements CommentDAO{
 	        em.merge(p);
 
 	        em.getTransaction().commit();
+			System.out.print("aggiungo un commento al post"
+					+ "");
 	        return true;
 	        
 	    } catch (Exception e) {
@@ -105,25 +109,21 @@ public class CommentDAOJpa implements CommentDAO{
 	@Override
 	public boolean addCommentToUser(Comment c, User u) {
 	    EntityManager em = DAOFactoryJpa.getManager();
-	    try {
-	        em.getTransaction().begin();
-
-	        u.getComments().add(c);
-
-	        em.merge(u);
-
-	        em.getTransaction().commit();
-	        return true;
-	        
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        em.getTransaction().rollback();
-	    } finally {
-	        if (em.isOpen()) {
-	            em.close();
-	        }
-	    }
-	    return false;
+	    
+        try {
+            em.getTransaction().begin();
+            u.getComments().add(c);
+            c.setUser(u);
+            em.merge(u);
+            em.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            em.getTransaction().rollback();
+            return false;
+        } finally {
+            em.close();
+        }
 	}
 }
 

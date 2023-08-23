@@ -2,6 +2,10 @@ package polimi.blog.dao.jpa;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+
 import javax.persistence.*;
 import polimi.blog.dao.*;
 import polimi.blog.dao.model.CommentDAO;
@@ -45,22 +49,4 @@ public class DAOFactoryJpa extends DAOFactory{
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("blog");
 		return emf.createEntityManager();
 	}
-	
-
-    private static final SessionFactory sessionFactory = buildSessionFactory();
-
-    private static SessionFactory buildSessionFactory() {
-        try {
-            // Carica le configurazioni da hibernate.cfg.xml
-            return new Configuration().configure().buildSessionFactory();
-        } catch (Throwable ex) {
-            System.err.println("Errore nella creazione della SessionFactory: " + ex);
-            throw new ExceptionInInitializerError(ex);
-        }
-    }
-
-    public static SessionFactory getSessionFactory() {
-        return sessionFactory;
-    }
-
 }

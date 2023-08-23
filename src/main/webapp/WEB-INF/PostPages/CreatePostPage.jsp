@@ -16,6 +16,11 @@
                 <div class="column" style="background-color: #16161d90;"></div>
                     <div class="column is-half" style="background-color: #16161d;">
                         <!-- Main Form -->
+		   				<p class="help is-danger" id="post-error">
+							<% if(request.getAttribute("post-error") != null && request.getAttribute("post-error") != "") { %>
+							<%=request.getAttribute("post-error")%>
+							<% } %>
+						</p>
                         <form action="<%=request.getContextPath()%>/CreatePostServlet" method="POST">
 	                        <div class="columns">
 	                            <div class="column is-10 is-offset-1" style="margin-top: 2rem;">

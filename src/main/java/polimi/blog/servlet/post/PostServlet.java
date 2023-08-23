@@ -31,8 +31,13 @@ public class PostServlet extends HttpServlet {
 		Post p = (Post) request.getSession().getAttribute("post");
 		User u = (User) request.getSession().getAttribute("user");
 		
-		DAOFactory.getDAOFactory().getCommentDAO().addCommentToPost(p, c);
-		DAOFactory.getDAOFactory().getCommentDAO().addCommentToUser(c, u);
+		if(!DAOFactory.getDAOFactory().getCommentDAO().addCommentToPost(p, c)) {
+			
+		}
+		
+		if(!DAOFactory.getDAOFactory().getCommentDAO().addCommentToUser(c, u)){
+			
+		}
 		request.getRequestDispatcher("/WEB-INF/PostPages/PostPage.jsp").forward(request, response);
 		
 	}
