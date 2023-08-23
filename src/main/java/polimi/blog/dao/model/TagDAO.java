@@ -10,6 +10,6 @@ public interface TagDAO {
 
 	List<Tag> findAllTag();
 
-	boolean addTagToPost(Post p, List<Tag> t);
+	boolean addTagToPost(Post p, Tag t);
 
 }

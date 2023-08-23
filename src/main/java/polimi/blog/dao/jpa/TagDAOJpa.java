@@ -1,5 +1,6 @@
 package polimi.blog.dao.jpa;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -63,19 +64,27 @@ public class TagDAOJpa implements TagDAO{
 	}
 	
 	@Override
-	public boolean addTagToPost(Post p, List<Tag> t) {
+	public boolean addTagToPost(Post p, Tag t) {
 	    EntityManager em = DAOFactoryJpa.getManager();
+	    
 	    try {
 	        em.getTransaction().begin();
-	        p.getTags().addAll(t);
-	        t.forEach(tag -> {tag.getPosts().add(p);});
-	        em.persist(t);
-	        em.persist(p);
-	        em.merge(t);
+	        TypedQuery<Tag> query = em.createQuery("SELECT t FROM tags t WHERE t.name = :tagName", Tag.class);
+	        query.setParameter("tagName", t.getName());
+	        List<Tag> existingTags = query.getResultList();
+	        
+	        if (existingTags.isEmpty()) {
+	            em.persist(t);
+	        } else {
+	            t = existingTags.get(0);
+	        }
+	        p.getTags().add(t);
+	        em.merge(p);
 	        em.getTransaction().commit();
 	        return true;
+	        
 	    } catch (Exception e) {
-	        e.printStackTrace(); 
+	        e.printStackTrace();
 	        em.getTransaction().rollback();
 	    } finally {
 	        if (em.isOpen()) {
@@ -84,6 +93,8 @@ public class TagDAOJpa implements TagDAO{
 	    }
 	    return false;
 	}
+
+
 	
 	public List<Tag> findAllTagsOfPost(Post p) {
 	    EntityManager em = DAOFactoryJpa.getManager();
@@ -101,6 +112,26 @@ public class TagDAOJpa implements TagDAO{
 	            em.close();
 	        }
 	    }
+	}
+	
+	public List<Post> findAllPostOfTag(Tag t){
+		
+	    EntityManager em = DAOFactoryJpa.getManager();
+	    try {
+	        TypedQuery<Post> q = em.createQuery(
+	            "SELECT p FROM posts p JOIN p.tags t WHERE t = :tagKey",
+	            Post.class);
+	        q.setParameter("tagKey", t);
+	        return q.getResultList();
+	    } catch (NoResultException e) {
+	        e.printStackTrace();
+	        return null; 
+	    } finally {
+	        if (em.isOpen()) {
+	            em.close();
+	        }
+	    }
+		
 	}
 	
 }

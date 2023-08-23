@@ -30,6 +30,16 @@ public class Post {
 		this.content = content;
 		this.postDate = postDate;
 	}
+	
+	public Post( String title, String content, LocalDateTime postDate, User user) {
+		super();
+		this.title = title;
+		this.content = content;
+		this.postDate = postDate;
+		this.user = user;
+	}
+	
+	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -45,14 +55,14 @@ public class Post {
 	@Column(nullable = false)
 	private LocalDateTime postDate;
 	
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 	
     @ManyToMany(mappedBy = "savedPosts")
     private List<User> userSaved = new ArrayList<>();
     
-	@ManyToMany
+	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "Tags_Links", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name =  "tag_id"))
 	private List<Tag> tags = new ArrayList<>();
 	

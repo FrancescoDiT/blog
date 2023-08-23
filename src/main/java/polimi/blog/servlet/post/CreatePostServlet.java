@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.jasper.tagplugins.jstl.core.ForEach;
+
 import polimi.blog.dao.DAOFactory;
 import polimi.blog.model.Post;
 import polimi.blog.model.Tag;
@@ -66,19 +68,23 @@ public class CreatePostServlet extends HttpServlet {
 			}
 
 		} else {
+			
 			 if (tags != null && !tags.isEmpty()) {
 				tagList = TagParser.parseTags(tags);
-					
-			 } else {
-				Post p = new Post(title, content, date);
+			 }
+			
 				User u = (User) request.getSession().getAttribute("user");
+				Post p = new Post(title, content, date, u);
 				DAOFactory.getDAOFactory().getPostDAO().addPost(u, p);
-				DAOFactory.getDAOFactory().getTagDAO().addTagToPost(p, tagList);
+				
+				tagList.forEach(t -> {DAOFactory.getDAOFactory().getTagDAO().addTagToPost(p, t);});
+				
 				request.getSession().setAttribute("post", p);
 				request.getRequestDispatcher("/WEB-INF/PostPages/PostPage.jsp").forward(request, response);
 				return;
 			 }
-		}
 		request.getRequestDispatcher("/WEB-INF/PostPages/CreatePostPage.jsp").forward(request, response);
+		}
+
 	}
-}
+

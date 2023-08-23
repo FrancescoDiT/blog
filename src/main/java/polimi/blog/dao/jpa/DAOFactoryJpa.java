@@ -45,5 +45,22 @@ public class DAOFactoryJpa extends DAOFactory{
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("blog");
 		return emf.createEntityManager();
 	}
+	
+
+    private static final SessionFactory sessionFactory = buildSessionFactory();
+
+    private static SessionFactory buildSessionFactory() {
+        try {
+            // Carica le configurazioni da hibernate.cfg.xml
+            return new Configuration().configure().buildSessionFactory();
+        } catch (Throwable ex) {
+            System.err.println("Errore nella creazione della SessionFactory: " + ex);
+            throw new ExceptionInInitializerError(ex);
+        }
+    }
+
+    public static SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
 
 }

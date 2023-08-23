@@ -1,0 +1,90 @@
+html {
+    background-color: #16161d;
+}
+
+.text-input {
+    background-color: #010409;
+    border: 0;
+    color: white;
+}
+
+.text-input::placeholder {
+    color: gray;
+}
+
+.button-input {
+    background-color: #010409;
+    border: 0;
+}
+
+.my-icon {
+    color:gray
+}
+
+.topbar {
+    margin-top: 0.5rem;
+}
+
+.post-space {
+    height: 91vh;
+    overflow-y: auto;
+}
+
+.post-space::-webkit-scrollbar {
+    display: none;
+}
+
+.followed-space {
+    height: 91vh;
+    overflow-y: auto;
+}
+
+.followed-space::-webkit-scrollbar {
+    display: none;
+}
+
+.list-element {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px gray solid;
+}
+
+.list-element:first-child {
+    padding-top: 0;
+    border-bottom: 1px gray solid;
+}
+
+.list-element:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+.detail-label {
+    font-size: small;
+    color: gray;
+}
+
+.label-link:hover {
+    color: lightskyblue;
+}
+
+.post-title {
+    color:white;
+    
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.125;
+}
+
+.tag-label{
+    color: gray;
+    font-size: medium;
+}
+
+.followed-profile {
+    font-size: large;
+}
+
+.followed-users-label {
+    font-size: x-large;
+}

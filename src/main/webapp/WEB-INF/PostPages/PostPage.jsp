@@ -13,8 +13,8 @@
         <link href="<%=request.getContextPath()%>/styles/postStyle.css" rel="stylesheet">
     </head>
 
-		<%User u = (User) request.getSession().getAttribute("User"); %>
-		<%Post p = (Post) request.getSession().getAttribute("Post"); %>
+		<%User u = (User) request.getSession().getAttribute("user"); %>
+		<%Post p = (Post) request.getSession().getAttribute("post"); %>
 
     <body style="margin-top: 2rem; color:white;">
         <div class="columns is-mobile">
@@ -30,7 +30,7 @@
                         </div>
                         <!-- Post Title -->
                         <div class="post-title">
-                        	 <% p.getTitle();%>
+                        	 <%= p.getTitle()%>
                         </div>
                         <!-- Post Date -->
                         <div class="detail-label">
@@ -63,10 +63,10 @@
                 <!-- Comment Maker-->
                 <div class="columns">
                     <div class="column is-half">
-                    	<form action="<%=request.getContextPath()%>/PostPageServlet" method="POST">
+                    	<form action="<%=request.getContextPath()%>/PostServlet" method="POST">
 	                        <div class="field has-addons">
 	                            <div class="control" style="width: 100%;">
-	                                <input type="text" class="input comment-input" placeholder="Write a comment!">
+	                                <input type="text" class="input comment-input" placeholder="Write a comment!" name="comment">
 	                            </div>
 	                            <div class="control">
 	                                <button class="button" type="submit" style="background-color: #010409; border: 0;">

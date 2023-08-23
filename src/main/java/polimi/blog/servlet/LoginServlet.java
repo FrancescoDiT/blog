@@ -42,7 +42,7 @@ public class LoginServlet extends HttpServlet {
 			request.setAttribute("general-error", "Wrong credentials. Please try again.");
 		} else {
 			try {
-				request.getSession().setAttribute("User", u);
+				request.getSession().setAttribute("user", u);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

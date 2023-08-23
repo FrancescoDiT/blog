@@ -8,6 +8,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,6 +34,27 @@ public class User {
 		this.password = password;
 		this.creationDate = creationDate;
 	}
+	
+	public User(String username, String email, String password, LocalDateTime creationDate, Post post) {
+		this.username = username;
+		this.email = email;
+		this.password = password;
+		this.creationDate = creationDate;
+		this.savedPosts.add(post);
+	}
+	
+	public User(String username, String email, String password, LocalDateTime creationDate, User user, boolean check) {
+		this.username = username;
+		this.email = email;
+		this.password = password;
+		this.creationDate = creationDate;
+		if(check) { 
+			this.followedUsers.add(user);
+				} else {
+					this.followingUsers.add(user);
+				}
+	}
+	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -54,18 +76,18 @@ public class User {
 	@Column(nullable = false)
 	private LocalDateTime creationDate;
 	
-	@ManyToMany
+	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "posts_saved", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name =  "post_id"))
 	private List<Post> savedPosts = new ArrayList<>();
 	
-	@ManyToMany
+	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "users_follows", joinColumns = @JoinColumn(name = "follower_id"), inverseJoinColumns = @JoinColumn(name =  "following_id"))
 	private List<User> followedUsers = new ArrayList<>();  //quelli che tu segui
 	
     @ManyToMany(mappedBy = "followedUsers")
     private List<User> followingUsers = new ArrayList<>(); //quelli che ti seguono
 	
-	@OneToMany(mappedBy="user", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Post> posts = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

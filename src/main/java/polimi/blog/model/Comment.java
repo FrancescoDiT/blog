@@ -18,8 +18,9 @@ public class Comment {
 	
 	public Comment() {};
 	
-	public Comment(String content) {
+	public Comment(String content, LocalDateTime date) {
 		this.content = content;
+		this.date = date;
 	}
 
 	@Id
@@ -37,7 +38,7 @@ public class Comment {
     @JoinColumn(name = "post_id")
     private Post post;
     
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -71,6 +72,14 @@ public class Comment {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public LocalDateTime getDate() {
+		return date;
+	}
+
+	public void setDate(LocalDateTime date) {
+		this.date = date;
 	}
 
 }

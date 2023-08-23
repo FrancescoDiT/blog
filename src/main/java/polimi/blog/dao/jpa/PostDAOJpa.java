@@ -3,6 +3,7 @@ package polimi.blog.dao.jpa;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.RollbackException;
@@ -46,15 +47,18 @@ public class PostDAOJpa implements PostDAO{
 	@Override
 	public boolean addPost(User u, Post p) {
 	    EntityManager em = DAOFactoryJpa.getManager();
+	    EntityTransaction transaction = em.getTransaction();
 	    try {
-	        em.getTransaction().begin();
+	        transaction.begin();
 	        u.getPosts().add(p);
 	        em.persist(p);
-	        em.getTransaction().commit();
+	        transaction.commit();
 	        return true; 
 	    } catch (RollbackException e) {
 	        e.printStackTrace();
-	        em.getTransaction().rollback();
+	        if (transaction.isActive()) {
+	            transaction.rollback();
+	        }
 	    } finally {
 	        if (em.isOpen()) {
 	            em.close();

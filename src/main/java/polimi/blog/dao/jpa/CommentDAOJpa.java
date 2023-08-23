@@ -11,6 +11,7 @@ import javax.persistence.TypedQuery;
 import polimi.blog.dao.jpa.CommentDAOJpa;
 import polimi.blog.dao.model.CommentDAO;
 import polimi.blog.model.Post;
+import polimi.blog.model.Tag;
 import polimi.blog.model.User;
 import polimi.blog.model.Comment;
 
@@ -63,8 +64,8 @@ public class CommentDAOJpa implements CommentDAO{
 	public List<Comment> findAllCommentsOfPost(Post p) {
 	    EntityManager em = DAOFactoryJpa.getManager();
 	    try {
-	        TypedQuery<Comment> query = em.createQuery("SELECT c FROM comments c WHERE c.post = :post", Comment.class);
-	        query.setParameter("post", p);
+	        TypedQuery<Comment> query = em.createQuery("SELECT c FROM comments c WHERE c.post = :postKey ORDER BY c.date DESC", Comment.class);
+	        query.setParameter("postKey", p);
 	        List<Comment> comments = query.getResultList();
 	        return comments;
 	    } catch (NoResultException e) {
@@ -77,20 +78,50 @@ public class CommentDAOJpa implements CommentDAO{
 
 
 	
-	public boolean addCommentToPost(Post p, User u, Comment c) {
+	@Override
+	public boolean addCommentToPost(Post p, Comment c) {
 	    EntityManager em = DAOFactoryJpa.getManager();
 	    try {
 	        em.getTransaction().begin();
+	        
 	        p.getComments().add(c);
-	        u.getComments().add(c);
-	        em.persist(c);
+
+	        em.merge(p);
+
 	        em.getTransaction().commit();
 	        return true;
-	    } catch (RollbackException e) {
+	        
+	    } catch (Exception e) {
 	        e.printStackTrace();
 	        em.getTransaction().rollback();
 	    } finally {
-	        em.close();
+	        if (em.isOpen()) {
+	            em.close();
+	        }
+	    }
+	    return false;
+	}
+	
+	@Override
+	public boolean addCommentToUser(Comment c, User u) {
+	    EntityManager em = DAOFactoryJpa.getManager();
+	    try {
+	        em.getTransaction().begin();
+
+	        u.getComments().add(c);
+
+	        em.merge(u);
+
+	        em.getTransaction().commit();
+	        return true;
+	        
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        em.getTransaction().rollback();
+	    } finally {
+	        if (em.isOpen()) {
+	            em.close();
+	        }
 	    }
 	    return false;
 	}
