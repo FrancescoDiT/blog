@@ -22,25 +22,6 @@ import javax.persistence.OneToMany;
 @NamedQuery(name = "Post.findAll", query = "SELECT p FROM posts p")
 public class Post {
 	
-	public Post() {}
-
-	public Post( String title, String content, LocalDateTime postDate) {
-		super();
-		this.title = title;
-		this.content = content;
-		this.postDate = postDate;
-	}
-	
-	public Post( String title, String content, LocalDateTime postDate, User user) {
-		super();
-		this.title = title;
-		this.content = content;
-		this.postDate = postDate;
-		this.user = user;
-	}
-	
-	
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(nullable = false)
@@ -69,6 +50,24 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
 
+	public Post() {}
+
+	public Post( String title, String content, LocalDateTime postDate) {
+		super();
+		this.title = title;
+		this.content = content;
+		this.postDate = postDate;
+	}
+	
+	public Post( String title, String content, LocalDateTime postDate, User user) {
+		super();
+		this.title = title;
+		this.content = content;
+		this.postDate = postDate;
+		this.user = user;
+	}
+	
+    
 	public int getId() {
 		return id;
 	}
