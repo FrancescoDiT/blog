@@ -36,3 +36,32 @@ html {
     color: white;
     border: 0;
 }
+
+.label-link:hover {
+	cursor: pointer;
+	animation: labelColorChange 0.7s infinite;
+
+}
+
+@keyframes labelColorChange {
+  0% {
+	color: #ff4242;
+  }
+  50%{
+  	color: #d400f0;
+  }
+  100% {
+	color: #ff4242;
+  }
+}
+
+.link-button {
+	background-color: transparent;
+	background-repeat: no-repeat;
+	border: none;
+	cursor: pointer;
+	overflow: hidden;
+	outline: none;
+	color: gray;
+	margin-top: 1rem;
+}

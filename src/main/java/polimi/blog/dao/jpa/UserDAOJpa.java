@@ -1,6 +1,7 @@
 package polimi.blog.dao.jpa;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -12,6 +13,7 @@ import javax.persistence.TypedQuery;
 
 import polimi.blog.dao.jpa.UserDAOJpa;
 import polimi.blog.dao.model.UserDAO;
+import polimi.blog.model.Post;
 import polimi.blog.model.User;
 
 public class UserDAOJpa implements UserDAO{
@@ -74,7 +76,11 @@ public class UserDAOJpa implements UserDAO{
 	    EntityManager em = DAOFactoryJpa.getManager();
 	    try {
 	        TypedQuery<User> q = em.createQuery(
-	        		"SELECT u FROM users u WHERE (u.username = :emailKey OR u.email = :emailKey) AND u.password = :passwordKey",
+	        		"SELECT u"
+	        		+ " FROM users u"
+	        		+ " WHERE (u.username = :emailKey"
+	        		+ " OR u.email = :emailKey)"
+	        		+ " AND u.password = :passwordKey",
 	        		User.class);
 	        q.setParameter("emailKey", email);
 	        q.setParameter("passwordKey", password);
@@ -88,11 +94,119 @@ public class UserDAOJpa implements UserDAO{
 	    }
 	}
 	
+	@Override
+	public List<User> mergeUser_followedUsers(User u) {
+	    EntityManager em = DAOFactoryJpa.getManager();
+	    List<User> followedUsers;
+	    TypedQuery<User> q;
+	    try {
+	    	q = em.createQuery(
+	    			  "SELECT fu "
+	        		+ "FROM users u "
+	        		+ "LEFT JOIN FETCH u.followedUsers fu "
+	        		+ "LEFT JOIN FETCH fu.followingUsers "
+	        		+ "WHERE u.id = :userIdKey "
+	        		+ "ORDER BY COUNT(fu.followingUsers) DESC",
+	        		User.class);
+	        q.setParameter("userIdKey", u.getId());
+	        followedUsers = q.getResultList();
+	        
+	        return followedUsers;
+	            
+	    } catch (RollbackException e) {
+	        e.printStackTrace();
+	    } finally {
+	        if (em.isOpen()) {
+	            em.close();
+	        }
+	    }
+	    return new ArrayList<>();
+	}
+	
+	@Override
+	public User mergeUser_Posts(User u) {
+	    EntityManager em = DAOFactoryJpa.getManager();
+	    List<User> users;
+	    TypedQuery<User> q;
+	    try {
+	    	q = em.createQuery(
+	    			  "SELECT DISTINCT u "
+	        		+ "FROM users u "
+	        		+ "LEFT JOIN FETCH u.posts "
+	        		+ "WHERE u.id = :userIdKey",
+	        		User.class);
+	        q.setParameter("userIdKey", u.getId());
+	        users = q.getResultList();
+	        u = users.get(0);
+	        return u;
+	            
+	    } catch (RollbackException e) {
+	        e.printStackTrace();
+	    } finally {
+	        if (em.isOpen()) {
+	            em.close();
+	        }
+	    }
+	    return new User();
+	}
+	
+	@Override
+	public List<Post> findAllMyPostsByDate(User u) {
+	    EntityManager em = DAOFactoryJpa.getManager();
+	    
+	    try {
+	        TypedQuery<Post> q = em.createQuery(	
+        		  "SELECT DISTINCT fup "
+        		+ "FROM users u "
+        		+ "LEFT JOIN FETCH u.followedUsers fu "
+        		+ "LEFT JOIN FETCH fu.posts fup "
+        		+ "WHERE u.id = :userIdKey "
+        		+ "AND fup.postDate > :LocalDateKey "
+        		+ "ORDER BY fup.postDate DESC",
+	            Post.class);
+	        q.setParameter("userIdKey", u.getId());
+	        q.setParameter("LocalDateKey", LocalDateTime.now().minusDays(2));
+	        return q.getResultList();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        if (em.isOpen()) {
+	            em.close();
+	        }
+	    }
+	    return new ArrayList<Post>(); 
+	}
+	
+	@Override
+	public User addInfo(User u, String info) {
+	    EntityManager em = DAOFactoryJpa.getManager();
+	    EntityTransaction transaction = em.getTransaction();
+	    try {
+	        transaction.begin();
+	        u = em.merge(u);
+	        u.setInfo(info);
+	        em.flush();
+	        transaction.commit();
+	        return u;
+	    } catch (Exception e) {
+	        if (transaction.isActive()) {
+	            transaction.rollback();
+	        }
+	        e.printStackTrace();
+	    } finally {
+	        if (em.isOpen()) {
+	            em.close();
+	        }
+	    }
+	    return new User();
+	}
 	
 	public User findABlogger(String username) {
 	    EntityManager em = DAOFactoryJpa.getManager();
 	    try {
-	        Query q = em.createQuery("SELECT u FROM users u WHERE u.username = :usernameKey");
+	        Query q = em.createQuery("SELECT u"
+	        		+ " FROM users u"
+	        		+ " WHERE u.username = :usernameKey");
 	        q.setParameter("usernameKey", username);
 	        return (User) q.getSingleResult();
 	    } catch (NoResultException e) {
@@ -133,7 +247,10 @@ public class UserDAOJpa implements UserDAO{
 	public List<User> findAllMyFollowers(User u) {
 	    EntityManager em = DAOFactoryJpa.getManager();
 	    TypedQuery<User> q = em.createQuery(
-	        "SELECT u FROM users u JOIN u.followingUsers fu WHERE fu.id = :userIdKey",
+	        "SELECT u "
+	        + "FROM users u "
+	        + "JOIN u.followingUsers fu "
+	        + "WHERE fu.id = :userIdKey",
 	        User.class);
 	    q.setParameter("userIdKey", u.getId());
 	    
@@ -149,15 +266,15 @@ public class UserDAOJpa implements UserDAO{
 	    return null;
 	}
 	
-	public int countAllMyFollowers(User u) {
+	public Long countAllMyFollowers(User u) {
 	    EntityManager em = DAOFactoryJpa.getManager();
 	    TypedQuery<Long> q = em.createQuery(
 	        "SELECT COUNT(u) FROM users u JOIN u.followingUsers fu WHERE fu.id = :userIdKey",
 	        Long.class);
 	    q.setParameter("userIdKey", u.getId());
 	    try {
-	        Long result = q.getSingleResult();
-	        return result.intValue();
+	 
+	        return q.getSingleResult();
 	    } catch (NoResultException e) {
 	        e.printStackTrace();
 	    } finally {
@@ -165,7 +282,7 @@ public class UserDAOJpa implements UserDAO{
 	            em.close();
 	        }
 	    }
-	    return -1;
+	    return -1L;
 	}
 
 	

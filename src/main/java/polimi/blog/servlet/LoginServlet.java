@@ -47,7 +47,7 @@ public class LoginServlet extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			request.getRequestDispatcher("/WEB-INF/PostPages/CreatePostPage.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/HomePage/HomePage.jsp").forward(request, response);
 			return;
 		}
 		request.getRequestDispatcher("Login.jsp").forward(request, response);

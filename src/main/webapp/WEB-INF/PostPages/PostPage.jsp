@@ -5,7 +5,6 @@
 <%@page import="java.util.List" %>
 <%@page import="java.util.ArrayList" %>
 <%@page import="java.time.LocalDate" %>
-<%@page import="org.hibernate.Hibernate" %>
 <!doctype html>
 <html>
     <head>
@@ -24,7 +23,9 @@
         <div class="columns is-mobile">
             <div class="column is-10 is-offset-1">
                 <div class="link-button-container">
-                    <a href="<%=request.getContextPath()%>/HomePage/HomePage.css" class="link-button label-link" href="-">&lt;- Go back</a>
+                   	<form action="<%=request.getContextPath()%>/HomeServlet" method="POST">
+               		     <button class="link-button label-link" type="submit" >&lt;- Go back</button>
+                	</form>
                 </div>
                 <div class="columns is-mobile">
                     <div class="column is-8">

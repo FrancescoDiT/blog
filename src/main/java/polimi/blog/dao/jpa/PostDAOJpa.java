@@ -1,5 +1,7 @@
 package polimi.blog.dao.jpa;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -110,6 +112,30 @@ public class PostDAOJpa implements PostDAO{
 	    return p;
 	}
 	
+
+	
+	public List<Post> findAllMyPosts(User u) {
+	    EntityManager em = DAOFactoryJpa.getManager();
+
+	    try {
+	        TypedQuery<Post> q = em.createQuery(
+	            "SELECT p FROM posts p WHERE p.user = :user",
+	            Post.class);
+	        q.setParameter("user", u);
+	        return q.getResultList();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        if (em.isOpen()) {
+	            em.close();
+	        }
+	    }
+	    return new ArrayList<Post>(); 	
+    }
+	
+	
+	
+	
 	public List<Post> findAllMySavedPosts(User u) {
 	    EntityManager em = DAOFactoryJpa.getManager();
 	    try {
@@ -153,24 +179,7 @@ public class PostDAOJpa implements PostDAO{
 	}
 
 	
-	public List<Post> findAllMyPosts(User u) {
-	    EntityManager em = DAOFactoryJpa.getManager();
 
-	    try {
-	        TypedQuery<Post> q = em.createQuery(
-	            "SELECT p FROM posts p WHERE p.user = :user",
-	            Post.class);
-	        q.setParameter("user", u);
-	        return q.getResultList();
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    } finally {
-	        if (em.isOpen()) {
-	            em.close();
-	        }
-	    }
-	    return null; 
-	}
 
 	
 }

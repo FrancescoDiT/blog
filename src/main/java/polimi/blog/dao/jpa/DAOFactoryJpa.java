@@ -3,9 +3,6 @@ package polimi.blog.dao.jpa;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-
 import javax.persistence.*;
 import polimi.blog.dao.*;
 import polimi.blog.dao.model.CommentDAO;

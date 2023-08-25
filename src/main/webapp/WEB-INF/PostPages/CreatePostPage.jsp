@@ -21,64 +21,66 @@
 							<%=request.getAttribute("post-error")%>
 							<% } %>
 						</p>
-                        <form action="<%=request.getContextPath()%>/CreatePostServlet" method="POST">
-	                        <div class="columns">
-	                            <div class="column is-10 is-offset-1" style="margin-top: 2rem;">
-	                                <!-- Go Back -->
-	                                <div class="link-button-container">
-	                                    <a class="link-button label-link" href="-">&lt;- Go back</a>
-	                                </div>
-	                                <!-- Create A Post -->
-	                                <div class="page-title block">
-	                                    Create a Post!
-	                                </div>
-	                                <!-- Title -->
-	                                <div class="field block">
-	                                    <label class="label form-label">Title</label>
-	                                    <div class="control" style="width: 100%;">
-	                                        <input type="text" class="input text-input" placeholder="Title here" name="title">
-	                                    </div>
-	                                </div>
-	                                
-                           			<p class="help is-danger" id="title-error">
-										<% if(request.getAttribute("title-error") != null && request.getAttribute("title-error") != "") { %>
-										<%=request.getAttribute("title-error")%>
-										<% } %>
-									</p>
-	                                
-	                                <!-- Content -->
-	                                <div class="field block">
-	                                    <label class="label form-label">Post Content</label>
-	                                    <div class="control" style="width: 100%;">
-	                                        <textarea class="textarea text-input" rows="15" placeholder="Write a beautiful post!"  name="content"></textarea>
-	                                    </div>
-	                                </div>
-	                                
-                          			<p class="help is-danger" id="content-error">
-										<% if(request.getAttribute("content-error") != null && request.getAttribute("content-error") != "") { %>
-										<%=request.getAttribute("content-error")%>
-										<% } %>
-									</p>
-	                                
-	                                <!-- Tags -->
-	                                <div class="field block">
-	                                    <label class="label form-label">Insert Tags</label>
-	                                    <div class="control" style="width: 100%;">
-	                                        <input type="text" class="input text-input" placeholder="Eg. Dogs, Cooking, Gardening..."  name="tags">
-	                                    </div>
-	                                </div>
-	                                
-	                                <!-- Divisor -->
-	                                <hr style="border-top: 2px solid #bbb;"></hr>
-	                                <!-- Post Button -->
-	                                <div class="columns">
-	                                    <div class="column is-6 is-offset-3">
-	                                        <button type="submit" class="button is-fullwidth gradient-background post-button"><b>Post!</b></button>
-	                                    </div>
-	                                </div>
-	                            </div>
-	                        </div>
-                        </form>
+                        <div class="columns">
+                            <div class="column is-10 is-offset-1" style="margin-top: 2rem;">
+                                <!-- Go Back -->
+                                <div class="link-button-container">
+				                   	<form action="<%=request.getContextPath()%>/HomeServlet" method="POST">
+				               		     <button class="link-button label-link" type="submit" >&lt;- Go back</button>
+				                	</form>
+                                </div>
+                                 <form action="<%=request.getContextPath()%>/CreatePostServlet" method="POST">
+                                <!-- Create A Post -->
+                                <div class="page-title block">
+                                    Create a Post!
+                                </div>
+                                <!-- Title -->
+                                <div class="field block">
+                                    <label class="label form-label">Title</label>
+                                    <div class="control" style="width: 100%;">
+                                        <input type="text" class="input text-input" placeholder="Title here" name="title">
+                                    </div>
+                                </div>
+                                
+                          			<p class="help is-danger" id="title-error">
+									<% if(request.getAttribute("title-error") != null && request.getAttribute("title-error") != "") { %>
+									<%=request.getAttribute("title-error")%>
+									<% } %>
+								</p>
+                                
+                                <!-- Content -->
+                                <div class="field block">
+                                    <label class="label form-label">Post Content</label>
+                                    <div class="control" style="width: 100%;">
+                                        <textarea class="textarea text-input" rows="15" placeholder="Write a beautiful post!"  name="content"></textarea>
+                                    </div>
+                                </div>
+                                
+                         			<p class="help is-danger" id="content-error">
+									<% if(request.getAttribute("content-error") != null && request.getAttribute("content-error") != "") { %>
+									<%=request.getAttribute("content-error")%>
+									<% } %>
+								</p>
+                                
+                                <!-- Tags -->
+                                <div class="field block">
+                                    <label class="label form-label">Insert Tags</label>
+                                    <div class="control" style="width: 100%;">
+                                        <input type="text" class="input text-input" placeholder="Eg. Dogs, Cooking, Gardening..."  name="tags">
+                                    </div>
+                                </div>
+                                
+                                <!-- Divisor -->
+                                <hr style="border-top: 2px solid #bbb;"></hr>
+                                <!-- Post Button -->
+                                <div class="columns">
+                                    <div class="column is-6 is-offset-3">
+                                        <button type="submit" class="button is-fullwidth gradient-background post-button"><b>Post!</b></button>
+                                    </div>
+                                </div>
+                              </form>
+                            </div>
+                        </div>
                     </div>
                 <div class="column" style="background-color: #16161d90;"></div>
             </div>
