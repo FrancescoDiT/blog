@@ -73,3 +73,13 @@ animation: divisorColorChange 1s infinite;
 	color: #d400f0;
   }
 }
+
+.comment-input {
+    background-color: #010409;
+    border: 0;
+    color: white;
+}
+
+.comment-input::placeholder {
+    color: gray;
+}

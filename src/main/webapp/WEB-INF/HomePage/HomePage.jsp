@@ -72,11 +72,13 @@
                                 </button>
                             </div>
                             <!-- Logout Button -->
-                            <div class="column is-narrow">
-                                <button class="button is-medium button-input" type="submit" style="color:lightgray">
-                                    Logout
-                                </button>
-                            </div>
+                            <form action="<%=request.getContextPath()%>/LogoutServlet" method="POST">
+	                            <div class="column is-narrow">
+	                                <button class="button is-medium button-input" type="submit" style="color:lightgray">
+	                                    Logout
+	                                </button>
+	                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>

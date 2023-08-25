@@ -4,14 +4,11 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
 import javax.persistence.RollbackException;
 import javax.persistence.TypedQuery;
 
 import polimi.blog.dao.jpa.PostDAOJpa;
 import polimi.blog.dao.model.PostDAO;
-import polimi.blog.model.Comment;
 import polimi.blog.model.Post;
 import polimi.blog.model.User;
 
@@ -50,8 +47,10 @@ public class PostDAOJpa implements PostDAO{
 	    EntityTransaction transaction = em.getTransaction();
 	    try {
 	        transaction.begin();
+	        u = em.merge(u);
 	        u.getPosts().add(p);
 	        em.persist(p);
+	        em.flush();
 	        transaction.commit();
 	        return true; 
 	    } catch (RollbackException e) {
@@ -67,6 +66,49 @@ public class PostDAOJpa implements PostDAO{
 	    return false;
 	}
 
+	@Override
+	public Post mergePost(Post p) {
+	    EntityManager em = DAOFactoryJpa.getManager();
+	    List<Post> posts;
+	    TypedQuery<Post> q;
+	    try {
+	    	q = em.createQuery("SELECT DISTINCT p "
+	        		+ "FROM posts p "
+	        		+ "LEFT JOIN FETCH p.comments "
+	        		+ "WHERE p.id = :postIdKey",
+	        		Post.class);
+	        q.setParameter("postIdKey", p.getId());
+	        posts = q.getResultList();
+	        p = posts.get(0);
+	        
+	        q = em.createQuery("SELECT DISTINCT p "
+	        		+ "FROM posts p "
+	        		+ "LEFT JOIN FETCH p.tags "
+	        		+ "WHERE p.id = :postIdKey",
+	        		Post.class);
+	        q.setParameter("postIdKey", p.getId());
+	        posts = q.getResultList();
+	        p = posts.get(0);
+	        
+	        q = em.createQuery("SELECT DISTINCT p "
+	        		+ "FROM posts p "
+	        		+ "LEFT JOIN FETCH p.user "
+	        		+ "WHERE p.id = :postIdKey",
+	        		Post.class);
+	        q.setParameter("postIdKey", p.getId());
+	        posts = q.getResultList();
+	        p = posts.get(0);
+	        return p; 
+	        
+	    } catch (RollbackException e) {
+	        e.printStackTrace();
+	    } finally {
+	        if (em.isOpen()) {
+	            em.close();
+	        }
+	    }
+	    return p;
+	}
 	
 	public List<Post> findAllMySavedPosts(User u) {
 	    EntityManager em = DAOFactoryJpa.getManager();
@@ -96,6 +138,7 @@ public class PostDAOJpa implements PostDAO{
 	        u.getPosts().add(p);
 	        em.persist(u);
 	        em.persist(p);
+	        em.flush();
 	        em.getTransaction().commit();
 	        return true; 
 	    } catch (RollbackException e) {

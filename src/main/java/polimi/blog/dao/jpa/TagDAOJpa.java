@@ -1,12 +1,9 @@
 package polimi.blog.dao.jpa;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.Query;
-import javax.persistence.RollbackException;
 import javax.persistence.TypedQuery;
 
 import polimi.blog.dao.jpa.TagDAOJpa;
@@ -63,6 +60,7 @@ public class TagDAOJpa implements TagDAO{
 	    return null;
 	}
 	
+	
 	@Override
 	public boolean addTagToPost(Post p, Tag t) {
 	    EntityManager em = DAOFactoryJpa.getManager();
@@ -72,14 +70,15 @@ public class TagDAOJpa implements TagDAO{
 	        TypedQuery<Tag> query = em.createQuery("SELECT t FROM tags t WHERE t.name = :tagName", Tag.class);
 	        query.setParameter("tagName", t.getName());
 	        List<Tag> existingTags = query.getResultList();
-	        
 	        if (existingTags.isEmpty()) {
 	            em.persist(t);
 	        } else {
 	            t = existingTags.get(0);
+	            t = em.merge(t);
 	        }
 	        p.getTags().add(t);
-	        em.merge(p);
+	        p = em.merge(p);
+	        em.flush();
 	        em.getTransaction().commit();
 	        return true;
 	        

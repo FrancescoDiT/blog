@@ -15,13 +15,6 @@ import javax.persistence.NamedQuery;
 @Entity(name = "comments")
 @NamedQuery(name = "Comment.findAll", query = "SELECT c FROM comments c")
 public class Comment {
-	
-	public Comment() {};
-	
-	public Comment(String content, LocalDateTime date) {
-		this.content = content;
-		this.date = date;
-	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,7 +27,7 @@ public class Comment {
 	@Column(nullable = false)
 	private LocalDateTime date;
 	
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "post_id")
     private Post post;
     
@@ -42,6 +35,21 @@ public class Comment {
     @JoinColumn(name = "user_id")
     private User user;
 
+	
+	public Comment() {};
+	
+	public Comment(String content, LocalDateTime date) {
+		this.content = content;
+		this.date = date;
+	}
+	
+	public Comment(String content, LocalDateTime date, User user, Post post) {
+		this.content = content;
+		this.date = date;
+		this.user = user;
+		this.post = post;
+	}
+    
 	public int getId() {
 		return id;
 	}

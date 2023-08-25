@@ -1,8 +1,11 @@
+<%@page import="polimi.blog.dao.DAOFactory"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@page import="polimi.blog.model.*" %>
 <%@page import="java.util.List" %>
+<%@page import="java.util.ArrayList" %>
 <%@page import="java.time.LocalDate" %>
+<%@page import="org.hibernate.Hibernate" %>
 <!doctype html>
 <html>
     <head>
@@ -11,6 +14,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link href="<%=request.getContextPath()%>/styles/bulma.css" rel="stylesheet">
         <link href="<%=request.getContextPath()%>/styles/postStyle.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.css">
     </head>
 
 		<%User u = (User) request.getSession().getAttribute("user"); %>
@@ -20,7 +24,7 @@
         <div class="columns is-mobile">
             <div class="column is-10 is-offset-1">
                 <div class="link-button-container">
-                    <a class="link-button label-link" href="-">&lt;- Go back</a>
+                    <a href="<%=request.getContextPath()%>/HomePage/HomePage.css" class="link-button label-link" href="-">&lt;- Go back</a>
                 </div>
                 <div class="columns is-mobile">
                     <div class="column is-8">
@@ -83,7 +87,7 @@
                         <!-- Comment Posted By Author -->
                         <div class="detail-label">
                             Posted by <b class="label-link">
-                            @<%=c.getUser() %>
+                            @<%=c.getUser().getUsername() %>
                             </b>
                         </div>
                         <!-- Comment Content -->

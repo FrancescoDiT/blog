@@ -27,17 +27,21 @@ public class PostServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 ;		
-		Comment c = new Comment(request.getParameter("comment"), LocalDateTime.now());
 		Post p = (Post) request.getSession().getAttribute("post");
 		User u = (User) request.getSession().getAttribute("user");
+		String content = request.getParameter("comment");
 		
-		if(!DAOFactory.getDAOFactory().getCommentDAO().addCommentToPost(p, c)) {
+		if(content == null || content.isEmpty()) {
+			request.getRequestDispatcher("/WEB-INF/PostPages/PostPage.jsp").forward(request, response);
+			return;
 			
+		}else {
+			Comment c = new Comment(content, LocalDateTime.now(), u, p);
+			DAOFactory.getDAOFactory().getCommentDAO().addComment(c, u, p);
+			p = DAOFactory.getDAOFactory().getPostDAO().mergePost(p);
+			request.getSession().setAttribute("post", p);
 		}
 		
-		if(!DAOFactory.getDAOFactory().getCommentDAO().addCommentToUser(c, u)){
-			
-		}
 		request.getRequestDispatcher("/WEB-INF/PostPages/PostPage.jsp").forward(request, response);
 		
 	}

@@ -21,7 +21,44 @@ import javax.persistence.OneToMany;
 @Entity(name = "users")
 @NamedQuery(name = "User.findAll", query = "SELECT u FROM users u")
 public class User {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(nullable = false)
+	private int id;
 	
+	@Column(unique = true, nullable = false)
+	private String username;
+	
+	@Column(unique = true, nullable = false)
+	private String email;
+
+	@Column(nullable = false)
+	private String password;
+	
+	@Column(nullable = true)
+	private String info;
+	
+	@Column(nullable = false)
+	private LocalDateTime creationDate;
+	
+	@ManyToMany(cascade = CascadeType.ALL,  fetch = FetchType.LAZY)
+	@JoinTable(name = "posts_saved", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name =  "post_id"))
+	private List<Post> savedPosts = new ArrayList<>();
+	
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinTable(name = "users_follows", joinColumns = @JoinColumn(name = "follower_id"), inverseJoinColumns = @JoinColumn(name =  "following_id"))
+	private List<User> followedUsers = new ArrayList<>();  //quelli che tu segui
+	
+    @ManyToMany(mappedBy = "followedUsers", fetch = FetchType.LAZY)
+    private List<User> followingUsers = new ArrayList<>(); //quelli che ti seguono
+	
+	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Post> posts = new ArrayList<>();
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	private List<Comment> comments = new ArrayList<>();
+
 	public User() {}
 	
 	public User(String username) {
@@ -55,44 +92,7 @@ public class User {
 				}
 	}
 	
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(nullable = false)
-	private int id;
 	
-	@Column(unique = true, nullable = false)
-	private String username;
-	
-	@Column(unique = true, nullable = false)
-	private String email;
-
-	@Column(nullable = false)
-	private String password;
-	
-	@Column(nullable = true)
-	private String info;
-	
-	@Column(nullable = false)
-	private LocalDateTime creationDate;
-	
-	@ManyToMany(cascade = CascadeType.ALL,  fetch = FetchType.LAZY)
-	@JoinTable(name = "posts_saved", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name =  "post_id"))
-	private List<Post> savedPosts = new ArrayList<>();
-	
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinTable(name = "users_follows", joinColumns = @JoinColumn(name = "follower_id"), inverseJoinColumns = @JoinColumn(name =  "following_id"))
-	private List<User> followedUsers = new ArrayList<>();  //quelli che tu segui
-	
-    @ManyToMany(mappedBy = "followedUsers", fetch = FetchType.LAZY)
-    private List<User> followingUsers = new ArrayList<>(); //quelli che ti seguono
-	
-	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private List<Post> posts = new ArrayList<>();
-	
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-	private List<Comment> comments = new ArrayList<>();
-
 	public int getId() {
 		return id;
 	}

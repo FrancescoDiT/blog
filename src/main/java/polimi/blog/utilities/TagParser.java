@@ -27,10 +27,10 @@ public class TagParser {
                   
 	                if (!cleanedTag.isEmpty()) {
 	                	
-	                		if(!cleanedTags.contains(cleanedTag)) {
-	                			cleanedTags.add(cleanedTag);
-	                			Tag t = new Tag(cleanedTag);
-	                			tags.add(t);
+                		if(!cleanedTags.contains(cleanedTag)) {
+                			cleanedTags.add(cleanedTag);
+                			Tag t = new Tag(cleanedTag);
+                			tags.add(t);
 	                 }
 	            }
             }

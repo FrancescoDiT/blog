@@ -9,9 +9,7 @@ import polimi.blog.model.User;
 public interface CommentDAO {
 
 	List<Comment> findAllComments();
-
-	boolean addCommentToPost(Post p, Comment c);
-
-	boolean addCommentToUser(Comment c, User u);
+	boolean addComment(Comment c, User u, Post p);
+	List<Comment> getAllCommentsOfPost(Post p);
 
 }

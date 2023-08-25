@@ -18,6 +18,7 @@
 			<property name="hibenate.dialect" value="org.hibernate.dialect..MySQL8Dialect"/>
 			<!-- in console voglio vedere tutte le query che vengo eseguite sul database? -->
 			<property name="hibernate.show_sql" value="true"/>
+			<property name="hibernate.connection.pool_size" value="100"/>
 		</properties>
 	</persistence-unit>
 </persistence>

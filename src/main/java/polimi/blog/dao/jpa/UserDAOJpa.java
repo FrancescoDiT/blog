@@ -52,6 +52,7 @@ public class UserDAOJpa implements UserDAO{
 	    try {
 	        et.begin();
 	        em.persist(u);
+	        em.flush();
 	        et.commit();
 	        return true;
 	    } catch (RollbackException e) {
@@ -112,6 +113,7 @@ public class UserDAOJpa implements UserDAO{
 	        fd.getFollowingUsers().add(fr);
 	        em.persist(fd);
 	        em.persist(fr);
+	        em.flush();
 	        transaction.commit();
 	        return true;
 	    } catch (Exception e) {

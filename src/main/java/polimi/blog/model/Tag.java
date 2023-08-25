@@ -3,7 +3,6 @@
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,13 +16,6 @@ import javax.persistence.NamedQuery;
 @NamedQuery(name = "Tag.findAll", query = "SELECT t FROM tags t")
 public class Tag {
 	
-	public Tag() {}
-	
-	public Tag(String name) {
-		super();
-		this.name = name;
-	}
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(nullable = false)
@@ -35,6 +27,13 @@ public class Tag {
     @ManyToMany(mappedBy = "tags", fetch = FetchType.LAZY)
     private List<Post> Posts = new ArrayList<>();
 
+	public Tag() {}
+	
+	public Tag(String name) {
+		super();
+		this.name = name;
+	}
+    
 	public int getId() {
 		return id;
 	}

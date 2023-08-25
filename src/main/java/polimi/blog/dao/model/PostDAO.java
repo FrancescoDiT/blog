@@ -11,4 +11,6 @@ public interface PostDAO {
 
 	boolean addPost(User u, Post p);
 
+	Post mergePost(Post p);
+
 }

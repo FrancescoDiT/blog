@@ -11,8 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.jasper.tagplugins.jstl.core.ForEach;
-
 import polimi.blog.dao.DAOFactory;
 import polimi.blog.model.Post;
 import polimi.blog.model.Tag;
@@ -87,6 +85,7 @@ public class CreatePostServlet extends HttpServlet {
 						
 							request.getSession().setAttribute("post-error", "error: could not load the post.");
 							try {
+								request.getSession().setAttribute("post-error", "error: could not load the post.");
 								request.getRequestDispatcher("/WEB-INF/PostPages/CreatePostPage.jsp").forward(request, response);
 								return;
 							} catch (ServletException e) {
