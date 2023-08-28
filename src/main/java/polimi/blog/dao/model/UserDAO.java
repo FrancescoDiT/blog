@@ -11,10 +11,15 @@ public interface UserDAO {
 	List<User> findAllUsers();
 	boolean signUp(String username, String email, String password, LocalDateTime creationDate);
 	User loginEmail(String email, String password);
-	List<User> mergeUser_followedUsers(User u);
-	User mergeUser_Posts(User u);
 	List<Post> findAllMyPostsByDate(User u);
 	User addInfo(User u, String info);
+	User mergeUser(User u);
+	List<User> getMorePopular();
+	Long countAllMyFollowers(User u);
+	User getUserByUsername(String username);
+	boolean subToBlogger(User fr, User fd);
+	boolean unsubToBlogger(User fr, User fd);
+	boolean checkSub(User fr, User fd);
 
 	
 }

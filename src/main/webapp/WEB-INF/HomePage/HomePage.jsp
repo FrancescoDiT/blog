@@ -3,10 +3,12 @@
 <%@page import="java.util.List" %>
 <%@page import="java.util.ArrayList" %>
 <%@page import="polimi.blog.model.*" %>
+<%@page import="polimi.blog.dao.*" %>
 <!doctype html>
 <html style="overflow-y: hidden;">
 
         <%User u = (User) request.getSession().getAttribute("user"); %>
+        <%u = DAOFactory.getDAOFactory().getUserDAO().mergeUser(u); %>
         
     <head>
         <title>@<%=u.getUsername()%>'s Home Page</title>
@@ -96,7 +98,6 @@
         </div>
         
 		<%List<Post> ps = (List<Post>) request.getSession().getAttribute("posts"); %>
-		<%List<User> fu = (List<User>) request.getSession().getAttribute("followedusers"); %>
     
         <!-- Page Content -->
         <div class="columns">
@@ -104,10 +105,10 @@
 	                <div class="columns">
 	                    <!-- Space for Posts -->
 	                    <div class="column is-9 post-space">
-                        <%if(fu == null || fu.isEmpty()){ %>
+                        <%if(u.getFollowedUsers() == null || u.getFollowedUsers().isEmpty()){ %>
 	                     	
                         
-                        <form action="<%=request.getContextPath()%>/ShowBlogsServlet" method="POST">
+                        <form action="<%=request.getContextPath()%>/ProfileResultServlet" method="POST">
                             <div class="post-title block">
                                 It seems you don't have any subscriptions! 
                              	Click  <button class="button is-medium button-input" type="submit" style="color:lightgray"> >here&lt; </button>
@@ -117,7 +118,7 @@
 	                     		
 	                     <%} else if(ps.isEmpty()) {%>
 	                     	
-                        <form action="<%=request.getContextPath()%>/ShowBlogsServlet" method="POST">
+                        <form action="<%=request.getContextPath()%>/ProfileResultServlet" method="POST">
                             <div class="post-title block">
                                 It seems there is nothing to see here for today! 
                              	Click  <button class="button is-medium button-input" type="submit" style="color:lightgray"> >here&lt; </button>
@@ -155,10 +156,10 @@
 	                        </div>
 	                        <!-- Followed User -->
 	                        
-                        <%if(fu == null || fu.isEmpty()){ %>
+                        <%if(u.getFollowedUsers() == null || u.getFollowedUsers().isEmpty()){ %>
 	                        	No Followed :/
 	                        <%}else{ %>
-		                       <%for(User fd : fu){ %> 
+		                       <%for(User fd : u.getFollowedUsers()){ %> 
 		                       <form action="<%=request.getContextPath()%>/ProfileServlet" method="POST">
 		                        	<div class="list-element label-link followed-profile">
 		                           		  <button class="link-button label-link" type="submit" ><b><%=fd.getUsername()%></b></button>

@@ -15,10 +15,12 @@
 			<!-- in che modo accederò al db (create - crea il db, update - inserisce solo i campi, create-drop - lo crea e lo elimna quando stoppo il server, validate - fa partire il progetto solo se il db compacia con le classi java) -->
 			<property name="hibernate.hbm2ddl.auto" value="update"/>
 			<!-- per scrivere le ddl su che tipologia di db sono? -->
-			<property name="hibenate.dialect" value="org.hibernate.dialect..MySQL8Dialect"/>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
+
 			<!-- in console voglio vedere tutte le query che vengo eseguite sul database? -->
 			<property name="hibernate.show_sql" value="true"/>
-			<property name="hibernate.connection.pool_size" value="100"/>
+			<property name="hibernate.format_sql" value="true"/>
+			<property name="hibernate.connection.pool_size" value="1000000"/>
 		</properties>
 	</persistence-unit>
 </persistence>

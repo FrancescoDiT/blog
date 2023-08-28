@@ -3,11 +3,13 @@
 <%@page import="java.util.List" %>
 <%@page import="java.util.ArrayList" %>
 <%@page import="polimi.blog.model.*" %>
+<%@page import="polimi.blog.dao.*" %>
 <!DOCTYPE html>
 <html style="overflow-y: hidden;">
     <head>
     
             <%User u = (User) request.getSession().getAttribute("user"); %>
+            <%u = DAOFactory.getDAOFactory().getUserDAO().mergeUser(u); %>
     
         <title>@<%=u.getUsername()%></title>
         <meta charset="UTF-8">
@@ -43,14 +45,12 @@
                 <div class="columns">
                     <!-- Info -->
                     <div class="column is-full">
-                        <p style="color:white;">
-                        
+                        <p style="color:white;">               
                         <%if(u.getInfo() == null || u.getInfo().isEmpty()){ %>
                         	No Description.
                         <%} else {%>
                         	<%= u.getInfo() %>
-                        	<%} %>
-                       
+                        	<%} %>               
                         </p>
                     </div>
                 </div>
@@ -60,7 +60,7 @@
 	                    <div class="column is-10">
 	                        <div class="field block">
 	                            <div class="control" style="width: 100%;">
-	                                <textarea class="textarea text-input" rows="1" placeholder="Write here to update your Info!" name="description"></textarea>
+	                                <textarea class="textarea text-input" rows="1" placeholder="Write here to update your Info!" name="info" style="width = 90%;"></textarea>
 	                            </div>
 	                        </div>
 	                    </div>
@@ -68,7 +68,12 @@
                     <div class="column is-2">
                         <button type="submit" class="button is-fullwidth update-info-button"><b>Update Info</b></button>
                     </div>
-                  </form>
+                  </form>        
+            	   	<form action="<%=request.getContextPath()%>/CreatePostServlet" method="GET">
+		                 <div class="column is-2">
+	                        <button type="submit" class="button is-fullwidth update-info-button"><b>Create a post!</b></button>
+	                    </div>
+             		</form>  
                 </div>
                 <!-- Divisor -->
                 <hr style="border-top: 2px solid #bbb;"></hr>
@@ -79,57 +84,31 @@
                             <!-- Space for Posts -->
                             <div class="column is-full post-space">
                                 <!-- Post -->
-                                
                                 <%if(u.getPosts().isEmpty()){ %>
-                                	
-                              	<div class="list-element">
-                                    <!-- Post Title Preview -->
-                                    <div class="post-title block">
-                                    		
-                                    		It seems you don't have any post!
-                                    		
-	                                </div>
-                                    <!-- Post Content Preview -->
-	                                  	<div>
-												Try to create a post, click
-						                	<form action="<%=request.getContextPath()%>/CreatePostServlet" method="POST">
-						             		     <button class="link-button label-link" type="submit" >&lt;- Here</button>
-						              		</form>  
-	                                  	</div>
-                                </div>
-                                	
-                                <%} else {%>
-   	                                  	<div>
-												Try to create a post, click
-						                	<form action="<%=request.getContextPath()%>/CreatePostServlet" method="POST">
-						             		     <button class="link-button label-link" type="submit" >&lt;- Here</button>
-						              		</form>  
-	                                  	</div>
+                                	<div class="post-title block">No post here. Create a new one! </div>
+                                	<%} else{ %>
 	                              <%for(Post p : u.getPosts()){ %>  
 		                                <div class="list-element">
 		                                    <!-- Posted on Date -->
-		                                    <div class="detail-label">
-		                                    
-		                                        Posted on <%=p.getPostDate().toLocalDate() %>
-		                                        
+		                                    <div class="detail-label">		        
+		                                        Posted on <%=p.getPostDate().toLocalDate() %>		                                        
 		                                    </div>
 		                                    <!-- Post Title Preview -->
-		                                    <div class="post-title block">
-		                                    		
-		                                    		<%=p.getTitle() %>
-		                                    		
-			                                </div>
+			                                    <form action="<%=request.getContextPath()%>/PostServlet" method="POST">
+			                                    <%request.getSession().setAttribute("post", p); %>
+			                                    <div class="post-title block">
+			                                    	<button type="submit"><%=p.getTitle() %></button>
+			                                    </div>
+			                                    </form>
 		                                    <!-- Post Content Preview -->
 		                                    <div>
-		                                        <p>
-													
+		                                        <p>													
 													<%=p.getContent()%>
-													
 		                                        </p>
 		                                    </div>
 		                                </div>
 	                                <%}%>
-                                <%}%>
+                               	 <%}%>
                             </div>
                         </div>
                     </div>

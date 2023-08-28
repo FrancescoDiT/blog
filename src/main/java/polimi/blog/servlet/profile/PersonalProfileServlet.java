@@ -31,13 +31,22 @@ public class PersonalProfileServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		User u = (User) request.getSession().getAttribute("user");
-		String info = (String) request.getAttribute("info");
+		String info = (String) request.getParameter("info");
+
+		System.out.println("info : " + info);
+		
 		
 		if(info != null) {
-		u = DAOFactory.getDAOFactory().getUserDAO().addInfo(u, info);
+			info = info.trim();
+			if(!info.isEmpty()) {
+				u = DAOFactory.getDAOFactory().getUserDAO().addInfo(u, info);
 			}
-		u = DAOFactory.getDAOFactory().getUserDAO().mergeUser_Posts(u);
-		request.getSession().setAttribute("user", u);
+		}
+			u = DAOFactory.getDAOFactory().getUserDAO().mergeUser(u);
+			request.getSession().setAttribute("user", u);
+		
+		Long counter = DAOFactory.getDAOFactory().getUserDAO().countAllMyFollowers(u);
+		request.getSession().setAttribute("counter", counter);
 		
 		request.getRequestDispatcher("/WEB-INF/ProfilePages/PersonalProfilePage.jsp").forward(request, response);
 

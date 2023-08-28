@@ -1,0 +1,62 @@
+html {
+    background-color: #16161d;
+    overflow-y: hidden;
+}
+
+body {
+    color:white;
+}
+
+.profile-space {
+    height: 95vh;
+    overflow-y: auto;
+}
+
+.profile-space::-webkit-scrollbar {
+    display: none;
+}
+
+.list-element {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px gray solid;
+}
+
+.list-element:first-child {
+    padding-top: 0;
+    border-bottom: 1px gray solid;
+}
+
+.list-element:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+.detail-label {
+    font-size: small;
+    color: gray;
+}
+
+.subscribers-label {
+    font-size: medium;
+    margin-top: auto;
+}
+
+.label-link:hover {
+    color: lightskyblue;
+}
+
+.link-button {
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
+    color: gray;
+    margin-top: 1rem;
+}
+
+.link-button-container {
+    margin-bottom: 0.5rem;
+}

@@ -7,8 +7,10 @@ C:\Users\franc\eclipse-workspace\Blog\src\main\java\polimi\blog\utilities\TagPar
 C:\Users\franc\eclipse-workspace\Blog\src\main\java\polimi\blog\servlet\profile\PersonalProfileServlet.java
 C:\Users\franc\eclipse-workspace\Blog\src\main\java\polimi\blog\dao\jpa\PostDAOJpa.java
 C:\Users\franc\eclipse-workspace\Blog\src\main\java\polimi\blog\dao\model\UserDAO.java
+C:\Users\franc\eclipse-workspace\Blog\src\main\java\polimi\blog\servlet\search\PostResultServlet.java
 C:\Users\franc\eclipse-workspace\Blog\src\main\java\polimi\blog\dao\jpa\UserDAOJpa.java
 C:\Users\franc\eclipse-workspace\Blog\src\main\java\polimi\blog\servlet\home\HomeServlet.java
+C:\Users\franc\eclipse-workspace\Blog\src\main\java\polimi\blog\servlet\profile\SubToBloggerServlet.java
 C:\Users\franc\eclipse-workspace\Blog\src\main\java\polimi\blog\model\User.java
 C:\Users\franc\eclipse-workspace\Blog\src\main\java\polimi\blog\servlet\LogoutServlet.java
 C:\Users\franc\eclipse-workspace\Blog\src\main\java\polimi\blog\utilities\PasswordValidator.java
@@ -19,6 +21,7 @@ C:\Users\franc\eclipse-workspace\Blog\src\main\java\polimi\blog\model\Tag.java
 C:\Users\franc\eclipse-workspace\Blog\src\main\java\polimi\blog\dao\model\TagDAO.java
 C:\Users\franc\eclipse-workspace\Blog\src\main\java\polimi\blog\servlet\post\PostServlet.java
 C:\Users\franc\eclipse-workspace\Blog\src\main\java\polimi\blog\model\Comment.java
+C:\Users\franc\eclipse-workspace\Blog\src\main\java\polimi\blog\servlet\search\ProfileResultServlet.java
 C:\Users\franc\eclipse-workspace\Blog\src\main\java\polimi\blog\utilities\EmailValidator.java
 C:\Users\franc\eclipse-workspace\Blog\src\main\java\polimi\blog\model\Post.java
 C:\Users\franc\eclipse-workspace\Blog\src\main\java\polimi\blog\servlet\LoginServlet.java

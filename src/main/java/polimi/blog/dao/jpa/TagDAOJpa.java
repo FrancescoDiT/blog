@@ -70,6 +70,7 @@ public class TagDAOJpa implements TagDAO{
 	        TypedQuery<Tag> query = em.createQuery("SELECT t FROM tags t WHERE t.name = :tagName", Tag.class);
 	        query.setParameter("tagName", t.getName());
 	        List<Tag> existingTags = query.getResultList();
+	        
 	        if (existingTags.isEmpty()) {
 	            em.persist(t);
 	        } else {
@@ -77,7 +78,7 @@ public class TagDAOJpa implements TagDAO{
 	            t = em.merge(t);
 	        }
 	        p.getTags().add(t);
-	        p = em.merge(p);
+
 	        em.flush();
 	        em.getTransaction().commit();
 	        return true;

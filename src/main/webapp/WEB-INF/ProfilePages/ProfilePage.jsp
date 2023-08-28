@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@page import="polimi.blog.model.*" %>
+<%@page import="polimi.blog.dao.*" %>
 <!DOCTYPE html>
 <html style="overflow-y: hidden;">
     <head>
@@ -9,6 +11,9 @@
 		<link href="<%=request.getContextPath()%>/styles/bulma.css" rel="stylesheet">
         <link href="<%=request.getContextPath()%>/styles/profileStyle.css" rel="stylesheet">
     </head>
+
+	<%User su = (User) request.getSession().getAttribute("searcheduser"); %>
+	<%su = DAOFactory.getDAOFactory().getUserDAO().mergeUser(su); %>
 
     <body>
         <div class="columns" style="margin-top: 2rem">
@@ -22,18 +27,28 @@
                             </form>
                         </div>
                         <h1 class="title is-2" style="color:white;">
-                            @DomenicoCastiGay
+                            @<%=su.getUsername() %>
                         </h1>
                     </div>
                     <!-- Subscriber Count -->
                     <div class="column is-narrow detail-label subscribers-label">
-                        2.000.000 subscribers
+                        <%=(Long) request.getSession().getAttribute("counter")%> subscribers
                     </div>
                     <!-- Follow Button -->
+                    
+                    <%request.getSession().setAttribute("searcheduser", su);%>
+                    <%boolean subcheck = (boolean) request.getSession().getAttribute("checksub");%>
                     <div class="column is-narrow" style="margin-left: auto;">
+                    <form action="<%=request.getContextPath()%>/SubToBloggerServlet" method="POST">
                         <button class="button is-medium button-input" type="submit" style="color:lightgray">
+                           
+                           <%if(subcheck){ %>
                             Follow
+                            <%}else {%>
+                            Unfollow
+                            <%} %>
                         </button>
+                        </form>
                     </div>
                 </div>
                 <!-- Info Label -->
@@ -44,7 +59,7 @@
                     <!-- Info -->
                     <div class="column is-full">
                         <p style="color:white;">
-                            RATS RATS WE ARE THE RATS WE PRAY AT NIGHT WE STALK AT NIGHT WE ARE THE RATS RATS RATS WE ARE THE RATS WE PRAY AT NIGHT WE STALK AT NIGHT WE ARE THE RATS RATS RATS WE ARE THE RATS WE PRAY AT NIGHT WE STALK AT NIGHT WE ARE THE RATS RATS RATS WE ARE THE RATS WE PRAY AT NIGHT WE STALK AT NIGHT WE ARE THE RATS RATS RATS WE ARE THE RATS WE PRAY AT NIGHT WE STALK AT NIGHT WE ARE THE RATS RATS RATS WE ARE THE RATS WE PRAY AT NIGHT WE STALK AT NIGHT WE ARE THE RATS RATS RATS WE ARE THE RATS WE PRAY AT NIGHT WE STALK AT NIGHT WE ARE THE RATS RATS RATS WE ARE THE RATS WE PRAY AT NIGHT WE STALK AT NIGHT WE ARE THE RATS RATS RATS WE ARE THE RATS WE PRAY AT NIGHT WE STALK AT NIGHT WE ARE THE RATS RATS RATS WE ARE THE RATS WE PRAY AT NIGHT WE STALK AT NIGHT WE ARE THE RATS RATS RATS WE ARE THE RATS WE PRAY AT NIGHT WE STALK AT NIGHT WE ARE THE RATS RATS RATS WE ARE THE RATS WE PRAY AT NIGHT WE STALK AT NIGHT WE ARE THE RATS 
+                        <%=su.getInfo() %>
                         </p>
                     </div>
                 </div>
@@ -57,159 +72,34 @@
                             <!-- Space for Posts -->
                             <div class="column is-full post-space">
                                 <!-- Post -->
-                                <div class="list-element">
-                                    <!-- Posted on Date -->
-                                    <div class="detail-label">
-                                        Posted on 11th August 2014
-                                    </div>
-                                    <!-- Post Title Preview -->
+                               <%if(su.getPosts() == null || su.getPosts().isEmpty()){ %> 
                                     <div class="post-title block">
-                                        Guys I think i found out why my dog was eating my dildo, is think he found out he's gay
+                                    	No posts here.
                                     </div>
-                                    <!-- Post Content Preview -->
-                                    <div>
-                                        <p>
-                                            Hey guys, did you know that in terms of male human and female Pokémon breeding,
-                                            Vaporeon is the most compatible Pokémon for humans?
-                                            Not only are they in the field egg group, which is mostly comprised of mammals,
-                                            Vaporeon are an average of 3”03’ tall and 63.9 pounds, this means
-                                            they’re large enough to be able handle human dicks, and with their impressive
-                                            Base Stats for HP and access to Acid Armor...
-                                        </p>
-                                    </div>
-                                </div>
-                                <!-- Post -->
-                                <div class="list-element">
-                                    <!-- Posted By Author on Date -->
-                                    <div class="detail-label">
-                                        Posted by <b class="label-link">@Manuel</b> on 11th August 2014
-                                    </div>
-                                    <!-- Post Title Preview -->
-                                    <div class="post-title block">
-                                        Guys I think i found out why my dog was eating my dildo, is think he found out he's gay
-                                    </div>
-                                    <!-- Post Content Preview -->
-                                    <div>
-                                        <p>
-                                            Hey guys, did you know that in terms of male human and female Pokémon breeding,
-                                            Vaporeon is the most compatible Pokémon for humans?
-                                            Not only are they in the field egg group, which is mostly comprised of mammals,
-                                            Vaporeon are an average of 3”03’ tall and 63.9 pounds, this means
-                                            they’re large enough to be able handle human dicks, and with their impressive
-                                            Base Stats for HP and access to Acid Armor...
-                                        </p>
-                                    </div>
-                                </div>
-                                <!-- Post -->
-                                <div class="list-element">
-                                    <!-- Posted By Author on Date -->
-                                    <div class="detail-label">
-                                        Posted by <b class="label-link">@Manuel</b> on 11th August 2014
-                                    </div>
-                                    <!-- Post Title Preview -->
-                                    <div class="post-title block">
-                                        Guys I think i found out why my dog was eating my dildo, is think he found out he's gay
-                                    </div>
-                                    <!-- Post Content Preview -->
-                                    <div>
-                                        <p>
-                                            Hey guys, did you know that in terms of male human and female Pokémon breeding,
-                                            Vaporeon is the most compatible Pokémon for humans?
-                                            Not only are they in the field egg group, which is mostly comprised of mammals,
-                                            Vaporeon are an average of 3”03’ tall and 63.9 pounds, this means
-                                            they’re large enough to be able handle human dicks, and with their impressive
-                                            Base Stats for HP and access to Acid Armor...
-                                        </p>
-                                    </div>
-                                </div>
-                                <!-- Post -->
-                                <div class="list-element">
-                                    <!-- Posted By Author on Date -->
-                                    <div class="detail-label">
-                                        Posted by <b class="label-link">@Manuel</b> on 11th August 2014
-                                    </div>
-                                    <!-- Post Title Preview -->
-                                    <div class="post-title block">
-                                        Guys I think i found out why my dog was eating my dildo, is think he found out he's gay
-                                    </div>
-                                    <!-- Post Content Preview -->
-                                    <div>
-                                        <p>
-                                            Hey guys, did you know that in terms of male human and female Pokémon breeding,
-                                            Vaporeon is the most compatible Pokémon for humans?
-                                            Not only are they in the field egg group, which is mostly comprised of mammals,
-                                            Vaporeon are an average of 3”03’ tall and 63.9 pounds, this means
-                                            they’re large enough to be able handle human dicks, and with their impressive
-                                            Base Stats for HP and access to Acid Armor...
-                                        </p>
-                                    </div>
-                                </div>
-                                <!-- Post -->
-                                <div class="list-element">
-                                    <!-- Posted By Author on Date -->
-                                    <div class="detail-label">
-                                        Posted by <b class="label-link">@Manuel</b> on 11th August 2014
-                                    </div>
-                                    <!-- Post Title Preview -->
-                                    <div class="post-title block">
-                                        Guys I think i found out why my dog was eating my dildo, is think he found out he's gay
-                                    </div>
-                                    <!-- Post Content Preview -->
-                                    <div>
-                                        <p>
-                                            Hey guys, did you know that in terms of male human and female Pokémon breeding,
-                                            Vaporeon is the most compatible Pokémon for humans?
-                                            Not only are they in the field egg group, which is mostly comprised of mammals,
-                                            Vaporeon are an average of 3”03’ tall and 63.9 pounds, this means
-                                            they’re large enough to be able handle human dicks, and with their impressive
-                                            Base Stats for HP and access to Acid Armor...
-                                        </p>
-                                    </div>
-                                </div>
-                                <!-- Post -->
-                                <div class="list-element">
-                                    <!-- Posted By Author on Date -->
-                                    <div class="detail-label">
-                                        Posted by <b class="label-link">@Manuel</b> on 11th August 2014
-                                    </div>
-                                    <!-- Post Title Preview -->
-                                    <div class="post-title block">
-                                        Guys I think i found out why my dog was eating my dildo, is think he found out he's gay
-                                    </div>
-                                    <!-- Post Content Preview -->
-                                    <div>
-                                        <p>
-                                            Hey guys, did you know that in terms of male human and female Pokémon breeding,
-                                            Vaporeon is the most compatible Pokémon for humans?
-                                            Not only are they in the field egg group, which is mostly comprised of mammals,
-                                            Vaporeon are an average of 3”03’ tall and 63.9 pounds, this means
-                                            they’re large enough to be able handle human dicks, and with their impressive
-                                            Base Stats for HP and access to Acid Armor...
-                                        </p>
-                                    </div>
-                                </div>
-                                <!-- Post -->
-                                <div class="list-element">
-                                    <!-- Posted By Author on Date -->
-                                    <div class="detail-label">
-                                        Posted by <b class="label-link">@Manuel</b> on 11th August 2014
-                                    </div>
-                                    <!-- Post Title Preview -->
-                                    <div class="post-title block">
-                                        Guys I think i found out why my dog was eating my dildo, is think he found out he's gay
-                                    </div>
-                                    <!-- Post Content Preview -->
-                                    <div>
-                                        <p>
-                                            Hey guys, did you know that in terms of male human and female Pokémon breeding,
-                                            Vaporeon is the most compatible Pokémon for humans?
-                                            Not only are they in the field egg group, which is mostly comprised of mammals,
-                                            Vaporeon are an average of 3”03’ tall and 63.9 pounds, this means
-                                            they’re large enough to be able handle human dicks, and with their impressive
-                                            Base Stats for HP and access to Acid Armor...
-                                        </p>
-                                    </div>
-                                </div>
+                                    <%}else{ %>
+	                                <% for(Post p : su.getPosts()) {%>
+	                                
+	                                <div class="list-element">
+	                                    <!-- Posted on Date -->
+	                                    <div class="detail-label">
+	                                        Posted on <%=p.getPostDate().toLocalDate() %>
+	                                    </div>
+	                                    <!-- Post Title Preview -->
+	                                    <form action="<%=request.getContextPath()%>/PostServlet" method="POST">
+	                                    <%request.getSession().setAttribute("post", p); %>
+	                                    <div class="post-title block">
+	                                    	<button type="submit"><%=p.getTitle() %></button>
+	                                    </div>
+	                                    </form>
+	                                    <!-- Post Content Preview -->
+	                                    <div>
+	                                        <p>
+												<%=p.getContent() %>
+	                                        </p>
+	                                    </div>
+	                                </div>
+	                                <%} %>
+                                <%} %>
                             </div>
                         </div>
                     </div>

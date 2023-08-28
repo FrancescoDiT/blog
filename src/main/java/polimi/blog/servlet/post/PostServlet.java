@@ -38,7 +38,6 @@ public class PostServlet extends HttpServlet {
 		}else {
 			Comment c = new Comment(content, LocalDateTime.now(), u, p);
 			DAOFactory.getDAOFactory().getCommentDAO().addComment(c, u, p);
-			p = DAOFactory.getDAOFactory().getPostDAO().mergePost(p);
 			request.getSession().setAttribute("post", p);
 		}
 		

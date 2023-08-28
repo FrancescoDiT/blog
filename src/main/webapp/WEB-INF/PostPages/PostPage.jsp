@@ -7,8 +7,13 @@
 <%@page import="java.time.LocalDate" %>
 <!doctype html>
 <html>
+
+		<%User u = (User) request.getSession().getAttribute("user"); %>
+		<%Post p = (Post) request.getSession().getAttribute("post"); %>
+		<%p = DAOFactory.getDAOFactory().getPostDAO().mergePost(p); %>
+
     <head>
-        <title>"post title"</title>
+        <title><%=p.getTitle() %></title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link href="<%=request.getContextPath()%>/styles/bulma.css" rel="stylesheet">
@@ -16,8 +21,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.css">
     </head>
 
-		<%User u = (User) request.getSession().getAttribute("user"); %>
-		<%Post p = (Post) request.getSession().getAttribute("post"); %>
+
 
     <body style="margin-top: 2rem; color:white;">
         <div class="columns is-mobile">
@@ -30,9 +34,11 @@
                 <div class="columns is-mobile">
                     <div class="column is-8">
                         <!-- Posted By Author -->
-                        <div class="detail-label">
-                            Posted by <b class="label-link">@<%=p.getUser().getUsername()%></b>
-                        </div>
+                       	<form action="<%=request.getContextPath()%>/ProfileServlet" method="POST">
+	                        <div class="detail-label">
+	                            Posted by <button type="submit" name="username" value="<%=p.getUser().getUsername()%>"><b class="label-link">@<%=p.getUser().getUsername()%></b></button>
+	                        </div>
+                        </form>
                         <!-- Post Title -->
                         <div class="post-title">
                         	 <%= p.getTitle()%>

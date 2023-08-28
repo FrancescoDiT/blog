@@ -1,7 +1,6 @@
 package polimi.blog.servlet.home;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -25,16 +24,11 @@ public class HomeServlet extends HttpServlet {
     
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		User u = (User) request.getSession().getAttribute("user");
-		List<User> followedUsers = DAOFactory.getDAOFactory().getUserDAO().mergeUser_followedUsers(u);
+	
+		List<Post> posts = DAOFactory.getDAOFactory().getUserDAO().findAllMyPostsByDate(u); 
 
-		List<Post> posts = new ArrayList<>();
-
-			
-			posts = DAOFactory.getDAOFactory().getUserDAO().findAllMyPostsByDate(u); 
-			
-			/*request.getSession().setAttribute("user", u);
-			request.getSession().setAttribute("followedusers", followedUsers);
-			request.getSession().setAttribute("posts", posts);*/
+		request.getSession().setAttribute("user", u);
+		request.getSession().setAttribute("posts", posts);
 		
 		request.getRequestDispatcher("/WEB-INF/HomePage/HomePage.jsp").forward(request, response);
 	}
