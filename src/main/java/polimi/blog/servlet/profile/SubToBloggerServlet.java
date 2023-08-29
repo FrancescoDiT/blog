@@ -45,11 +45,13 @@ public class SubToBloggerServlet extends HttpServlet {
 		if(subcheck) {
 			DAOFactory.getDAOFactory().getUserDAO().unsubToBlogger(u, b);
 			System.out.println("TOLGO IL FOLLOWER................");
+			request.getSession().setAttribute("checksub",subcheck);
 			request.getRequestDispatcher("/WEB-INF/ProfilePages/ProfilePage.jsp").forward(request, response);
 			return;
 		} else { 
 			DAOFactory.getDAOFactory().getUserDAO().subToBlogger(u, b);
 			System.out.println("AGGIUNGO IL FOLLOWER................");
+			request.getSession().setAttribute("checksub",subcheck);
 			request.getRequestDispatcher("/WEB-INF/ProfilePages/ProfilePage.jsp").forward(request, response);
 			return;
 		}

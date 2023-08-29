@@ -1,7 +1,7 @@
 package polimi.blog.servlet.home;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,12 +23,36 @@ public class HomeServlet extends HttpServlet {
     }
     
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		User u = (User) request.getSession().getAttribute("user");
-	
-		List<Post> posts = DAOFactory.getDAOFactory().getUserDAO().findAllMyPostsByDate(u); 
+		
+		User u = new User();
+		try {
+			u = (User) request.getSession().getAttribute("user");
+		}catch (Exception e) {
+			System.out.println("ERROR GETTING USER FROM SESSION");
+		}
+		
+		if(u==null) {
+			request.getRequestDispatcher("Login.jsp").forward(request, response);
+			return;
+		}
+		
+        u = DAOFactory.getDAOFactory().getUserDAO().mergeUser(u);
+		
+        Set<Post> posts = DAOFactory.getDAOFactory().getPostDAO().findAllMyPostsByDate(u); 
+		
+		try {
+			request.getSession().setAttribute("posts", posts);
+		}catch (Exception e) {
+			System.out.println("ERROR SETTING POSTS TO SESSION");
+		}
 
-		request.getSession().setAttribute("user", u);
-		request.getSession().setAttribute("posts", posts);
+		Set<User> followedUsers = DAOFactory.getDAOFactory().getUserDAO().findAllWhoIFollow(u);
+		
+		try {
+			request.getSession().setAttribute("followed_users", followedUsers); 
+		}catch (Exception e){
+			System.out.println("ERROR SETTING FOLLOWED USERS TO SESSION");
+		}
 		
 		request.getRequestDispatcher("/WEB-INF/HomePage/HomePage.jsp").forward(request, response);
 	}

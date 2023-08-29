@@ -22,7 +22,7 @@
                     <!-- Username -->
                     <div class="column is-narrow">
                         <div class="link-button-container">
-                            <form action="<%=request.getContextPath()%>/HomeServlet" method="POST">
+                            <form action="<%=request.getContextPath()%>/RemoveAttributeServlet" method="POST">
                                 <button type="submit" class="link-button label-link">&lt;- Go back</button>
                             </form>
                         </div>
@@ -43,10 +43,11 @@
                         <button class="button is-medium button-input" type="submit" style="color:lightgray">
                            
                            <%if(subcheck){ %>
-                            Follow
+							  Unfollow
                             <%}else {%>
-                            Unfollow
+                            Follow
                             <%} %>
+                            
                         </button>
                         </form>
                     </div>

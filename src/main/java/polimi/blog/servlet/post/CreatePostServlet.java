@@ -3,7 +3,9 @@ package polimi.blog.servlet.post;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -50,7 +52,19 @@ public class CreatePostServlet extends HttpServlet {
 		String content = request.getParameter("content");
 		String tags = request.getParameter("tags");
 		LocalDateTime date = LocalDateTime.now();
-		List<Tag> tagList = new ArrayList<>();
+		Set<Tag> tagList = new LinkedHashSet<>();
+		
+		User u = new User();
+		try {
+			u = (User) request.getSession().getAttribute("user");
+		}catch (Exception e) {
+			System.out.println("ERROR GETTING USER FROM SESSION");
+		}
+		
+		if(u==null) {
+			request.getRequestDispatcher("Login.jsp").forward(request, response);
+			return;
+		}
 		
 		if (title == null || title.isEmpty()) {
 			try {
@@ -71,10 +85,9 @@ public class CreatePostServlet extends HttpServlet {
 		} else {
 			
 			 if (tags != null && !tags.isEmpty()) {
-				tagList = TagParser.parseTags(tags);
+				tagList = new LinkedHashSet<Tag>(TagParser.parseTags(tags));
 			 }
-			
-				User u = (User) request.getSession().getAttribute("user");
+			 
 				Post p = new Post(title, content, date, u);
 				
 				if(!DAOFactory.getDAOFactory().getPostDAO().addPost(u, p)) {
@@ -100,7 +113,20 @@ public class CreatePostServlet extends HttpServlet {
 							}
 						}
 					});	
-						request.getSession().setAttribute("post", p);
+				
+						try {
+							request.getSession().setAttribute("post", p);
+						}catch (Exception e) {
+							System.err.println("ERROR SETTING POST TO SESSION");
+						}
+						
+						try {
+							request.getSession().setAttribute("tags", tagList);
+						}catch (Exception e) {
+							System.err.println("ERROR SETTING TAGS TO SESSION");
+						}
+						
+						
 						request.getRequestDispatcher("/WEB-INF/PostPages/PostPage.jsp").forward(request, response);
 						return;
 				}		

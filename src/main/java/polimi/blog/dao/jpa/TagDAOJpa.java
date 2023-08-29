@@ -1,6 +1,8 @@
 package polimi.blog.dao.jpa;
 
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -78,7 +80,8 @@ public class TagDAOJpa implements TagDAO{
 	            t = em.merge(t);
 	        }
 	        p.getTags().add(t);
-
+	        t.getPosts().add(p);
+	        p = em.merge(p);
 	        em.flush();
 	        em.getTransaction().commit();
 	        return true;
@@ -95,15 +98,18 @@ public class TagDAOJpa implements TagDAO{
 	}
 
 
-	
-	public List<Tag> findAllTagsOfPost(Post p) {
+	@Override
+	public Set<Tag> findAllTagsOfPost(Post p) {
 	    EntityManager em = DAOFactoryJpa.getManager();
 	    try {
+	    	p = em.find(Post.class, p);
 	        TypedQuery<Tag> q = em.createQuery(
-	            "SELECT t FROM tags t JOIN t.posts p WHERE p = :post",
+	              "SELECT t "
+	            + "FROM tags t "
+	            + "WHERE t.post = :postIdKey",
 	            Tag.class);
-	        q.setParameter("post", p);
-	        return q.getResultList();
+	        q.setParameter("postIdKey", p.getId());
+	        return new LinkedHashSet<Tag>(q.getResultList());
 	    } catch (NoResultException e) {
 	        e.printStackTrace();
 	        return null; 

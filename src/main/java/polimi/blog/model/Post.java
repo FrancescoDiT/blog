@@ -2,7 +2,10 @@ package polimi.blog.model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -41,14 +44,14 @@ public class Post {
     private User user;
 	
     @ManyToMany(mappedBy = "savedPosts", fetch = FetchType.LAZY)
-    private List<User> userSaved = new ArrayList<>();
+    private Set<User> userSaved = new LinkedHashSet<>();
     
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinTable(name = "Tags_Links", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name =  "tag_id"))
-	private List<Tag> tags = new ArrayList<>();
+	private Set<Tag> tags = new LinkedHashSet<>();
 	
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Comment> comments = new ArrayList<>();
+    private Set<Comment> comments = new LinkedHashSet<>();
 
 	public Post() {}
 
@@ -108,27 +111,27 @@ public class Post {
 		this.user = user;
 	}
 
-	public List<User> getUserSaved() {
+	public Set<User> getUserSaved() {
 		return userSaved;
 	}
 
-	public void setUserSaved(List<User> userSaved) {
+	public void setUserSaved(Set<User> userSaved) {
 		this.userSaved = userSaved;
 	}
 
-	public List<Tag> getTags() {
+	public Set<Tag> getTags() {
 		return tags;
 	}
 
-	public void setTags(List<Tag> tags) {
+	public void setTags(Set<Tag> tags) {
 		this.tags = tags;
 	}
 
-	public List<Comment> getComments() {
+	public Set<Comment> getComments() {
 		return comments;
 	}
 
-	public void setComments(List<Comment> comments) {
+	public void setComments(Set<Comment> comments) {
 		this.comments = comments;
 	}
 	

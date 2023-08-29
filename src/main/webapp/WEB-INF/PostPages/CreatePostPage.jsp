@@ -25,7 +25,7 @@
                             <div class="column is-10 is-offset-1" style="margin-top: 2rem;">
                                 <!-- Go Back -->
                                 <div class="link-button-container">
-				                   	<form action="<%=request.getContextPath()%>/HomeServlet" method="POST">
+				                   	<form action="<%=request.getContextPath()%>/RemoveAttributeServlet" method="POST">
 				               		     <button class="link-button label-link" type="submit" >&lt;- Go back</button>
 				                	</form>
                                 </div>

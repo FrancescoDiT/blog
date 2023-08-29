@@ -1,7 +1,10 @@
   package polimi.blog.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,7 +28,7 @@ public class Tag {
 	private String name;
 
     @ManyToMany(mappedBy = "tags", fetch = FetchType.LAZY)
-    private List<Post> Posts = new ArrayList<>();
+    private Set<Post> posts = new LinkedHashSet<>();
 
 	public Tag() {}
 	
@@ -50,12 +53,12 @@ public class Tag {
 		this.name = name;
 	}
 
-	public List<Post> getPosts() {
-		return Posts;
+	public Set<Post> getPosts() {
+		return posts;
 	}
 
-	public void setPosts(List<Post> posts) {
-		Posts = posts;
+	public void setPosts(Set<Post> posts) {
+		this.posts = posts;
 	}
 	
 }

@@ -4,13 +4,17 @@
 <%@page import="java.util.ArrayList" %>
 <%@page import="polimi.blog.model.*" %>
 <%@page import="polimi.blog.dao.*" %>
+<%@page import="java.util.LinkedHashSet"%>
 <!DOCTYPE html>
 <html style="overflow-y: hidden;">
     <head>
     
             <%User u = (User) request.getSession().getAttribute("user"); %>
-            <%u = DAOFactory.getDAOFactory().getUserDAO().mergeUser(u); %>
-    
+            <%Long counter = (Long) request.getSession().getAttribute("counter");%> 
+    		<%
+    		@SuppressWarnings("unchecked")
+    		LinkedHashSet<Post> my_posts = (LinkedHashSet<Post>) request.getSession().getAttribute("my_posts");
+    		%>
         <title>@<%=u.getUsername()%></title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,7 +29,7 @@
                     <!-- Username -->
                     <div class="column is-narrow">
                         <div class="link-button-container">
-                            <form action="<%=request.getContextPath()%>/HomeServlet" method="POST"> 
+                            <form action="<%=request.getContextPath()%>/RemoveAttributeServlet" method="POST"> 
                                 <button type="submit" class="link-button label-link">&lt;- Go back</button>
                             </form> 
                         </div>
@@ -35,9 +39,10 @@
                     </div>
                     <!-- Subscriber Count -->
                     <div class="column is-narrow detail-label subscribers-label">
-                        <%= (Long) request.getSession().getAttribute("counter") %> subscribers
+                        <%=counter%> subscribers
                     </div>
                 </div>
+ 
                 <!-- Info Label -->
                 <h1 class="title is-4" style="color:white;">
                     Info:
@@ -75,6 +80,11 @@
 	                    </div>
              		</form>  
                 </div>
+       			<p class="help is-danger" id="error">
+					<% if(request.getAttribute("error") != null && request.getAttribute("error") != "") { %>
+					<%=request.getAttribute("error")%>
+					<% } %>
+				</p>
                 <!-- Divisor -->
                 <hr style="border-top: 2px solid #bbb;"></hr>
                 <div class="columns">
@@ -84,10 +94,10 @@
                             <!-- Space for Posts -->
                             <div class="column is-full post-space">
                                 <!-- Post -->
-                                <%if(u.getPosts().isEmpty()){ %>
+                                <%if(my_posts.isEmpty()){ %>
                                 	<div class="post-title block">No post here. Create a new one! </div>
                                 	<%} else{ %>
-	                              <%for(Post p : u.getPosts()){ %>  
+	                              <%for(Post p : my_posts){ %>  
 		                                <div class="list-element">
 		                                    <!-- Posted on Date -->
 		                                    <div class="detail-label">		        
@@ -95,9 +105,8 @@
 		                                    </div>
 		                                    <!-- Post Title Preview -->
 			                                    <form action="<%=request.getContextPath()%>/PostServlet" method="POST">
-			                                    <%request.getSession().setAttribute("post", p); %>
 			                                    <div class="post-title block">
-			                                    	<button type="submit"><%=p.getTitle() %></button>
+			                                    	<button type="submit" name="post_id" value="<%=p.getId()%>"><%=p.getTitle() %></button>
 			                                    </div>
 			                                    </form>
 		                                    <!-- Post Content Preview -->

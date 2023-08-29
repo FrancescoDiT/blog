@@ -1,7 +1,9 @@
 package polimi.blog.dao.jpa;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -62,18 +64,20 @@ public class CommentDAOJpa implements CommentDAO{
 
 
 	@Override
-	public List<Comment> getAllCommentsOfPost(Post p) {
+	public Set<Comment> findAllCommentsOfPost(Post p) {
 		EntityManager em = DAOFactoryJpa.getManager();
 	    try {
-	    	em.getTransaction().begin();
-	    	p = em.merge(p);
-	        TypedQuery<Comment> query = em.createQuery("SELECT c FROM comments c WHERE c.post = :postKey ORDER BY c.date DESC", Comment.class);
-	        query.setParameter("postKey", p.getId());
-	        List<Comment> comments = query.getResultList();
-	        em.flush();
-            em.getTransaction().commit();
-        
-	        return comments;
+	    	p = em.find(Post.class, p.getId());
+	        TypedQuery<Comment> query =
+	        		em.createQuery(
+	        				  "SELECT c "
+	        				+ "FROM comments c "
+	        				+ "WHERE c.post = :postIdKey "
+	        				+ "ORDER BY c.date DESC"
+	        				, Comment.class);
+	        query.setParameter("postIdKey", p.getId());
+	      
+	        return new LinkedHashSet<Comment>(query.getResultList());
 	    } catch (NoResultException e) {
 	        e.printStackTrace();
 	    } finally {
@@ -81,7 +85,7 @@ public class CommentDAOJpa implements CommentDAO{
 	        em.close();
 	    	}
 	    }
-	    return new ArrayList<Comment>();
+	    return new LinkedHashSet<Comment>();
 	}
 
 	

@@ -5,15 +5,23 @@
 <%@page import="java.util.List" %>
 <%@page import="java.util.ArrayList" %>
 <%@page import="java.time.LocalDate" %>
+<%@page import="java.util.LinkedHashSet"%>
 <!doctype html>
 <html>
 
 		<%User u = (User) request.getSession().getAttribute("user"); %>
 		<%Post p = (Post) request.getSession().getAttribute("post"); %>
-		<%p = DAOFactory.getDAOFactory().getPostDAO().mergePost(p); %>
+		<%
+		@SuppressWarnings("unchecked")
+		LinkedHashSet<Comment> comments = (LinkedHashSet<Comment>) request.getSession().getAttribute("comments");
+		%>
+		<%
+		@SuppressWarnings("unchecked")
+		LinkedHashSet<Tag> tags = (LinkedHashSet<Tag>) request.getSession().getAttribute("tags"); 
+		%>
 
     <head>
-        <title><%=p.getTitle() %></title>
+        <title><%=p.getTitle()%></title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link href="<%=request.getContextPath()%>/styles/bulma.css" rel="stylesheet">
@@ -21,16 +29,21 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.css">
     </head>
 
-
-
     <body style="margin-top: 2rem; color:white;">
         <div class="columns is-mobile">
             <div class="column is-10 is-offset-1">
                 <div class="link-button-container">
-                   	<form action="<%=request.getContextPath()%>/HomeServlet" method="POST">
+                   	<form action="<%=request.getContextPath()%>/RemoveAttributeServlet" method="POST">
                		     <button class="link-button label-link" type="submit" >&lt;- Go back</button>
                 	</form>
                 </div>
+                
+             	 <p class="help is-danger" id="post-error">
+					<% if(request.getAttribute("post-error") != null && request.getAttribute("post-error") != "") { %>
+					<%=request.getAttribute("post-error")%>
+					<% } %>
+				</p>
+                
                 <div class="columns is-mobile">
                     <div class="column is-8">
                         <!-- Posted By Author -->
@@ -51,11 +64,16 @@
                     <!-- Tags -->
                     <div class="column">
                         <div class="columns .is-variable is-multiline">
-                        <%for(Tag t : p.getTags()){ %>
+                        <%if(tags == null || tags.isEmpty()){ %>
+                        <%}else{%>
+                        <%for(Tag t : tags){ %>
                             <div class="column is-narrow label-link tag-label">
-                                #<%=t.getName() %>
+	                            <form action="<%=request.getContextPath()%>/TagSearchServlet" method="POST"> 
+	                                <button type="submit" value="<%=t.getName()%>" name="tag_id"  >#<%=t.getName() %></button>
+	                            </form>  
                             </div>
                             <% } %>
+                          <% } %>
                         </div>
                     </div>
                 </div>
@@ -74,7 +92,7 @@
                 <!-- Comment Maker-->
                 <div class="columns">
                     <div class="column is-half">
-                    	<form action="<%=request.getContextPath()%>/PostServlet" method="POST">
+                    	<form action="<%=request.getContextPath()%>/ReloadPostServlet" method="POST">
 	                        <div class="field has-addons">
 	                            <div class="control" style="width: 100%;">
 	                                <input type="text" class="input comment-input" placeholder="Write a comment!" name="comment">
@@ -89,19 +107,24 @@
                     </div>
                 </div>
                 <div>
-                  <%for(Comment c : p.getComments()) { %>
-                    <div class="block">
-                        <!-- Comment Posted By Author -->
-                        <div class="detail-label">
-                            Posted by <b class="label-link">
-                            @<%=c.getUser().getUsername() %>
-                            </b>
-                        </div>
-                        <!-- Comment Content -->
-                        <div>
-                            <%=c.getContent() %>
-                        </div>
-                    </div>
+                
+                <%if(comments == null || comments.isEmpty()){ %>
+                	<div>No Comments.</div>
+                	<%}else{ %>
+	                  <%for(Comment c : comments) { %>
+	                    <div class="block">
+	                        <!-- Comment Posted By Author -->
+	                        <div class="detail-label">
+	                            Posted by <b class="label-link">
+	                            @<%=c.getUser().getUsername() %>
+	                            </b>
+	                        </div>
+	                        <!-- Comment Content -->
+	                        <div>
+	                            <%=c.getContent() %>
+	                        </div>
+	                    </div>
+	                    <%} %>
                     <%} %>
                 </div>
             </div>

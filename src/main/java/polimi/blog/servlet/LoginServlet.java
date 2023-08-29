@@ -44,10 +44,9 @@ public class LoginServlet extends HttpServlet {
 			try {
 				request.getSession().setAttribute("user", u);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("ERROR SETTING USER TO SESSION");
 			}
-			request.getRequestDispatcher("/WEB-INF/HomePage/HomePage.jsp").forward(request, response);
+			request.getRequestDispatcher("HomeServlet").include(request, response);
 			return;
 		}
 		request.getRequestDispatcher("Login.jsp").forward(request, response);

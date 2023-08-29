@@ -2,7 +2,10 @@ package polimi.blog.dao.jpa;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -146,7 +149,7 @@ public class UserDAOJpa implements UserDAO{
 	    	q = em.createQuery(
 	    			  "SELECT DISTINCT u "
 	        		+ "FROM users u "
-	        		+ "LEFT JOIN FETCH u.followingUsers "
+	        		+ "LEFT JOIN FETCH u.followerUsers "
 	        		+ "WHERE u.id = :userIdKey ",
 	        		User.class);
 	        q.setParameter("userIdKey", u.getId());
@@ -167,32 +170,7 @@ public class UserDAOJpa implements UserDAO{
 	}
 	
 	
-	@Override
-	public List<Post> findAllMyPostsByDate(User u) {
-	    EntityManager em = DAOFactoryJpa.getManager();
-	    
-	    try {
-	        TypedQuery<Post> q = em.createQuery(	
-        		  "SELECT DISTINCT fup "
-        		+ "FROM users u "
-        		+ "LEFT JOIN u.followedUsers fu "
-        		+ "LEFT JOIN fu.posts fup "
-        		+ "WHERE u.id = :userIdKey "
-        		+ "AND fup.postDate > :LocalDateKey "
-        		+ "ORDER BY fup.postDate DESC",
-	            Post.class);
-	        q.setParameter("userIdKey", u.getId());
-	        q.setParameter("LocalDateKey", LocalDateTime.now().minusDays(2));
-	        return q.getResultList();
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    } finally {
-	        if (em.isOpen()) {
-	            em.close();
-	        }
-	    }
-	    return new ArrayList<Post>(); 
-	}
+
 	
 	@Override
 	public User addInfo(User u, String info) {
@@ -268,7 +246,7 @@ public class UserDAOJpa implements UserDAO{
 	        fr = this.mergeUser(fd);
 
 	        fr.getFollowedUsers().add(fd);
-	        fd.getFollowingUsers().add(fr);
+	        fd.getFollowerUsers().add(fr);
 
 	        em.flush();
 	        transaction.commit();
@@ -322,7 +300,7 @@ public class UserDAOJpa implements UserDAO{
 	        fr = this.mergeUser(fd);
 	        
 	        fr.getFollowedUsers().remove(fd);
-	        fd.getFollowingUsers().remove(fr);
+	        fd.getFollowerUsers().remove(fr);
 
 	        em.flush();
 	        transaction.commit();
@@ -346,7 +324,7 @@ public class UserDAOJpa implements UserDAO{
 	    TypedQuery<User> q = em.createQuery(
 	        "SELECT u "
 	        + "FROM users u "
-	        + "JOIN u.followingUsers fu "
+	        + "JOIN u.followerUsers fu "
 	        + "WHERE fu.id = :userIdKey",
 	        User.class);
 	    q.setParameter("userIdKey", u.getId());
@@ -369,7 +347,7 @@ public class UserDAOJpa implements UserDAO{
 	    TypedQuery<Long> q = em.createQuery(
 	        "SELECT COUNT(u) "
 	        + "FROM users u "
-	        + "JOIN u.followingUsers fu "
+	        + "JOIN u.followerUsers fu "
 	        + "WHERE fu.id = :userIdKey",
 	        Long.class);
 	    q.setParameter("userIdKey", u.getId());
@@ -386,8 +364,8 @@ public class UserDAOJpa implements UserDAO{
 	    return -1L;
 	}
 
-	
-	public List<User> findAllWhoIFollow(User u) {
+	@Override
+	public Set<User> findAllWhoIFollow(User u) {
 	    EntityManager em = DAOFactoryJpa.getManager();
 	    TypedQuery<User> q = em.createQuery(
 	        "SELECT u "
@@ -397,8 +375,7 @@ public class UserDAOJpa implements UserDAO{
 	        User.class);
 	    q.setParameter("userIdKey", u.getId());
 	    try {
-	        List<User> result = q.getResultList();
-	        return result;
+	        return new LinkedHashSet<User>(q.getResultList());
 	    } catch (NoResultException e) {
 	        e.printStackTrace();
 	    } finally {
@@ -406,7 +383,7 @@ public class UserDAOJpa implements UserDAO{
 	            em.close();
 	        }
 	    }
-	    return null;
+	    return new HashSet<>();
 	}
 
 	

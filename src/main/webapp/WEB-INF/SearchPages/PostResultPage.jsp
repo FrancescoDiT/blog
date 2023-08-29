@@ -13,7 +13,7 @@
     <body>
         <div class="columns">
             <div class="column is-10 is-offset-1">
-                <form action="<%=request.getContextPath()%>/HomeServlet" method="POST">
+                <form action="<%=request.getContextPath()%>/RemoveAttributeServlet" method="POST">
                     <button class="link-button label-link" type="submit" >&lt;- Go back</button>
                 </form>
                 <!-- Post Content -->

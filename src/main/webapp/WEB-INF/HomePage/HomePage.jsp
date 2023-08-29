@@ -1,14 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<%@page import="java.util.List" %>
-<%@page import="java.util.ArrayList" %>
 <%@page import="polimi.blog.model.*" %>
 <%@page import="polimi.blog.dao.*" %>
+<%@page import="java.util.LinkedHashSet"%>
 <!doctype html>
 <html style="overflow-y: hidden;">
 
         <%User u = (User) request.getSession().getAttribute("user"); %>
-        <%u = DAOFactory.getDAOFactory().getUserDAO().mergeUser(u); %>
         
     <head>
         <title>@<%=u.getUsername()%>'s Home Page</title>
@@ -96,8 +94,12 @@
                 </div>
             </div>
         </div>
-        
-		<%List<Post> ps = (List<Post>) request.getSession().getAttribute("posts"); %>
+		<%
+		@SuppressWarnings("unchecked")
+		LinkedHashSet<Post> posts = (LinkedHashSet<Post>) request.getSession().getAttribute("posts"); 
+		@SuppressWarnings("unchecked")
+		LinkedHashSet<User> followed_users = (LinkedHashSet<User>) request.getSession().getAttribute("followed_users");
+		%>
     
         <!-- Page Content -->
         <div class="columns">
@@ -105,7 +107,7 @@
 	                <div class="columns">
 	                    <!-- Space for Posts -->
 	                    <div class="column is-9 post-space">
-                        <%if(u.getFollowedUsers() == null || u.getFollowedUsers().isEmpty()){ %>
+                        <%if(followed_users == null || followed_users.isEmpty()){ %>
 	                     	
                         
                         <form action="<%=request.getContextPath()%>/ProfileResultServlet" method="POST">
@@ -116,7 +118,7 @@
                             </div>
                         </form>
 	                     		
-	                     <%} else if(ps.isEmpty()) {%>
+	                     <%} else if(posts.isEmpty()) {%>
 	                     	
                         <form action="<%=request.getContextPath()%>/ProfileResultServlet" method="POST">
                             <div class="post-title block">
@@ -128,7 +130,7 @@
 	                     	
 	                     <%} else { %>
 	                     
-	                    <%for(Post p : ps){%>
+	                    <%for(Post p : posts){%>
 	                      	  <!-- Post -->
 		                        <div class="list-element">
 		                            <!-- Posted By Author on Date -->
@@ -156,10 +158,10 @@
 	                        </div>
 	                        <!-- Followed User -->
 	                        
-                        <%if(u.getFollowedUsers() == null || u.getFollowedUsers().isEmpty()){ %>
+                        <%if(followed_users == null || followed_users.isEmpty()){ %>
 	                        	No Followed :/
 	                        <%}else{ %>
-		                       <%for(User fd : u.getFollowedUsers()){ %> 
+		                       <%for(User fd : followed_users){ %> 
 		                       <form action="<%=request.getContextPath()%>/ProfileServlet" method="POST">
 		                        	<div class="list-element label-link followed-profile">
 		                           		  <button class="link-button label-link" type="submit" ><b><%=fd.getUsername()%></b></button>

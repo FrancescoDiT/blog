@@ -2,8 +2,10 @@ package polimi.blog.model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
-
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -44,20 +46,20 @@ public class User {
 	
 	@ManyToMany(cascade = CascadeType.ALL,  fetch = FetchType.LAZY)
 	@JoinTable(name = "posts_saved", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name =  "post_id"))
-	private List<Post> savedPosts = new ArrayList<>();
+	private Set<Post> savedPosts = new LinkedHashSet<>();
 	
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinTable(name = "users_follows", joinColumns = @JoinColumn(name = "follower_id"), inverseJoinColumns = @JoinColumn(name =  "following_id"))
-	private List<User> followedUsers = new ArrayList<>();  //quelli che tu segui
+	@JoinTable(name = "users_follows", joinColumns = @JoinColumn(name = "followed_id"), inverseJoinColumns = @JoinColumn(name =  "follower_id"))
+	private Set<User> followedUsers = new LinkedHashSet<>();  //quelli che tu segui
 	
     @ManyToMany(mappedBy = "followedUsers", fetch = FetchType.LAZY)
-    private List<User> followingUsers = new ArrayList<>(); //quelli che ti seguono
+    private Set<User> followerUsers = new LinkedHashSet<>(); //quelli che ti seguono
 	
 	@OneToMany(mappedBy="user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<Post> posts = new ArrayList<>();
+	private Set<Post> posts = new LinkedHashSet<>();
 	
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-	private List<Comment> comments = new ArrayList<>();
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Set<Comment> comments = new LinkedHashSet<>();
 
 	public User() {}
 	
@@ -101,7 +103,7 @@ public class User {
 		if(check) { 
 			this.followedUsers.add(user);
 				} else {
-					this.followingUsers.add(user);
+					this.followerUsers.add(user);
 				}
 	}
 	
@@ -154,43 +156,43 @@ public class User {
 		this.creationDate = creationDate;
 	}
 
-	public List<Post> getSavedPosts() {
+	public Set<Post> getSavedPosts() {
 		return savedPosts;
 	}
 
-	public void setSavedPosts(List<Post> savedPosts) {
+	public void setSavedPosts(Set<Post> savedPosts) {
 		this.savedPosts = savedPosts;
 	}
 
-	public List<User> getFollowedUsers() {
+	public Set<User> getFollowedUsers() {
 		return followedUsers;
 	}
 
-	public void setFollowedUsers(List<User> followedUsers) {
+	public void setFollowedUsers(Set<User> followedUsers) {
 		this.followedUsers = followedUsers;
 	}
 
-	public List<User> getFollowingUsers() {
-		return followingUsers;
+	public Set<User> getFollowerUsers() {
+		return followerUsers;
 	}
 
-	public void setFollowingUsers(List<User> followingUsers) {
-		this.followingUsers = followingUsers;
+	public void setFollowerUsers(Set<User> followerUsers) {
+		this.followerUsers = followerUsers;
 	}
 
-	public List<Post> getPosts() {
+	public Set<Post> getPosts() {
 		return posts;
 	}
 
-	public void setPosts(List<Post> posts) {
+	public void setPosts(Set<Post> posts) {
 		this.posts = posts;
 	}
 
-	public List<Comment> getComments() {
+	public Set<Comment> getComments() {
 		return comments;
 	}
 
-	public void setComments(List<Comment> comments) {
+	public void setComments(Set<Comment> comments) {
 		this.comments = comments;
 	}
 	
